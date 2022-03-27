@@ -1,7 +1,7 @@
 package me.tomnewton.routes.api
 
 import io.ktor.server.routing.*
-import me.tomnewton.routes.api.accounts.AccountDAO
+import me.tomnewton.database.AccountDAO
 import me.tomnewton.routes.api.accounts.createAccount
 import me.tomnewton.routes.api.accounts.getAccount
 
