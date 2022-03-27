@@ -8,6 +8,7 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import me.tomnewton.Messages
+import me.tomnewton.routes.api.accounts.ExampleAccountDAO
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,7 +29,7 @@ class RoutingKtTest {
     ) {
         testApplication {
             application {
-                configureRouting()
+                configureRouting(ExampleAccountDAO())
                 configureStatusPages()
             }
             client.request {
