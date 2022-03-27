@@ -8,11 +8,12 @@ interface AccountDAO {
 
     /**
      * Inserts an account into the records
+     * @param id the id for the new account
      * @param account the account to add
      * @return Whether the operation was successful
      */
 
-    fun insertAccount(account: Account): Boolean
+    fun insertAccount(id: Int, account: Account): Boolean
 
     /**
      * Get an account with a specified [id]
@@ -24,9 +25,10 @@ interface AccountDAO {
 
     /**
      * Update the given [account] in the database
+     * @param id the id of the account to update
      * @param account The account to update
      * @return Whether the operation was successful
      */
 
-    fun updateAccount(account: Account): Boolean
+    fun updateAccount(id: Int, account: Account): Boolean
 }
