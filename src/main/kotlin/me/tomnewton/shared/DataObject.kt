@@ -1,4 +1,4 @@
-package me.tomnewton.routes
+package me.tomnewton.shared
 
 interface DataObject {
     fun toJsonObject(): String
