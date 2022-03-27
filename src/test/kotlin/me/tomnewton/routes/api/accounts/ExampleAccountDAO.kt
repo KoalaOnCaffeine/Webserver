@@ -1,5 +1,8 @@
 package me.tomnewton.routes.api.accounts
 
+import me.tomnewton.database.AccountDAO
+import me.tomnewton.shared.Account
+
 class ExampleAccountDAO(private val accounts: MutableMap<Int, Account> = mutableMapOf()) : AccountDAO {
 
     override fun insertAccount(id: Int, account: Account): Boolean {

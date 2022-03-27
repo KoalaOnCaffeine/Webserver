@@ -1,4 +1,6 @@
-package me.tomnewton.routes.api.accounts
+package me.tomnewton.database
+
+import me.tomnewton.shared.Account
 
 /*
 https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm

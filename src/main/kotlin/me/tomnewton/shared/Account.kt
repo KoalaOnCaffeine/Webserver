@@ -1,4 +1,4 @@
-package me.tomnewton.routes.api.accounts
+package me.tomnewton.shared
 
 import me.tomnewton.routes.DataObject
 
