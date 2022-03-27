@@ -5,7 +5,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import me.tomnewton.plugins.getValue
 
-fun Route.createAccount() {
+fun Route.createAccount(accountDAO: AccountDAO) {
     post("/create") {
         val username by call
         val email by call
