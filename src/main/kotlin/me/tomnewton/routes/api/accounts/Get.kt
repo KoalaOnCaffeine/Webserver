@@ -19,6 +19,6 @@ fun Route.getAccount(accountDAO: AccountDAO) {
             call.respondText("No account found with that ID")
             return@get
         }
-        call.respondText(account.toJsonObject(), ContentType.Application.Json)
+        call.respondText(account.toSensitiveJsonObject(), ContentType.Application.Json)
     }
 }
