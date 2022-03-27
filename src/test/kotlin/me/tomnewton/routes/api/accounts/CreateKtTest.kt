@@ -1,0 +1,33 @@
+package me.tomnewton.routes.api.accounts
+
+import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+
+internal class CreateKtTest {
+
+    private val elizabethOlsenAccount = Account("elizabeth_olsen")
+    private val chrisHemsworthAccount = Account("chris_hemsworth")
+    private val sebastianStanAccount = Account("sebastian_stan")
+
+    private val exampleDAO: AccountDAO = ExampleAccountDAO(
+        mutableMapOf(
+            0 to elizabethOlsenAccount,
+            1 to chrisHemsworthAccount
+        )
+    )
+
+    @Test
+    fun testCreateAbsentAccount() {
+        assertTrue(exampleDAO.insertAccount(2, sebastianStanAccount))
+    }
+
+    @Test
+    fun testCreatePresentAccount() {
+        assertFalse(exampleDAO.insertAccount(0, sebastianStanAccount))
+        assertFalse(exampleDAO.insertAccount(1, sebastianStanAccount))
+
+        assertFalse(exampleDAO.insertAccount(0, elizabethOlsenAccount))
+        assertFalse(exampleDAO.insertAccount(0, chrisHemsworthAccount))
+    }
+
+}
