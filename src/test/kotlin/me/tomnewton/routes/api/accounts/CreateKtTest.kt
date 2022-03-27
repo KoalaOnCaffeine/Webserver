@@ -28,6 +28,9 @@ internal class CreateKtTest {
 
         assertFalse(exampleDAO.insertAccount(0, elizabethOlsenAccount))
         assertFalse(exampleDAO.insertAccount(0, chrisHemsworthAccount))
+
+        assertEquals(elizabethOlsenAccount, exampleDAO.getAccountById(0))
+        assertEquals(chrisHemsworthAccount, exampleDAO.getAccountById(1))
     }
 
 }
