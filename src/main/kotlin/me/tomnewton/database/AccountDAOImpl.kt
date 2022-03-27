@@ -4,6 +4,8 @@ import me.tomnewton.shared.Account
 
 class AccountDAOImpl(private val accounts: MutableMap<Int, Account> = mutableMapOf()) : AccountDAO {
 
+    override fun countAccounts() = accounts.size
+
     override fun insertAccount(id: Int, account: Account): Boolean {
         // Return true if the previous value was null, meaning nothing would be overwritten
         return accounts.putIfAbsent(id, account) == null
