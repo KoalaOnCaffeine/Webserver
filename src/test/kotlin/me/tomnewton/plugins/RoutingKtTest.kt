@@ -4,13 +4,10 @@ import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import io.ktor.client.utils.EmptyContent.status
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
 import me.tomnewton.Messages
-import org.junit.Assert
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
