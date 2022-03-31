@@ -6,6 +6,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.plugins.parameter
+import me.tomnewton.shared.responses.accounts.AccountGetFailResponse
+import me.tomnewton.shared.responses.accounts.AccountGetSuccessResponse
 
 fun Route.getAccount(accountDAO: AccountDAO) {
     get("/{id}") {
@@ -16,9 +18,13 @@ fun Route.getAccount(accountDAO: AccountDAO) {
         }
         val account = accountDAO.getAccountById(accountID)
         if (account == null) {
-            call.respondText("No account found with that ID")
+            val response = AccountGetFailResponse()
+            call.respondText(response.toJsonObject())
             return@get
         }
-        call.respondText(account.toSensitiveJsonObject(), ContentType.Application.Json)
+
+        // Replace with response message
+        val response = AccountGetSuccessResponse(account)
+        call.respondText(response.toJsonObject(), ContentType.Application.Json)
     }
 }
