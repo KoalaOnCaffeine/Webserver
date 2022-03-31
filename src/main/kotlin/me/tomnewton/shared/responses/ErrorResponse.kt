@@ -6,5 +6,5 @@ package me.tomnewton.shared.responses
  * @param errorDescription A description of the error
  */
 
-class ErrorResponse(code: Int, errorDescription: String) :
-    Response(code, "An error occurred", "{error: \"$errorDescription}\"")
+open class ErrorResponse(code: Int, errorDescription: String) :
+    Response(code, "An error occurred", "{error: \"$errorDescription\"}")
