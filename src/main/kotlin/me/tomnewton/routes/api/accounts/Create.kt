@@ -7,8 +7,8 @@ import io.ktor.server.routing.*
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.plugins.parseObject
 import me.tomnewton.shared.Account
-import me.tomnewton.shared.responses.ErrorResponse
 import me.tomnewton.shared.responses.Response
+import me.tomnewton.shared.responses.accounts.AccountCreateFailResponse
 
 fun Route.createAccount(accountDAO: AccountDAO) {
     post("/create") {
@@ -37,7 +37,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
             call.respondText(response.toJsonObject())
         } else {
             // Send appropriate error, such as the database failed
-            val response = ErrorResponse(0, "An error occurred while trying to create the account")
+            val response = AccountCreateFailResponse()
             call.respondText(response.toJsonObject())
         }
 
