@@ -9,7 +9,7 @@ https://stackoverflow.com/questions/19154202/data-access-object-dao-in-java
 interface AccountDAO {
 
     /**
-     * Returns the number of accounts so that the next ID can be generated
+     * Gets the number of accounts in the database
      * @return the number of accounts
      */
 
