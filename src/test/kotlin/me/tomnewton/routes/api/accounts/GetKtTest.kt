@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 
 internal class GetKtTest {
 
-    private val elizabethOlsenAccount = Account("elizabeth_olsen")
-    private val chrisHemsworthAccount = Account("chris_hemsworth")
+    private val elizabethOlsenAccount = Account("elizabeth_olsen", "", "", "", emptyList(), emptyList(), "")
+    private val chrisHemsworthAccount = Account("chris_hemsworth", "", "", "", emptyList(), emptyList(), "")
 
     private val exampleDAO: AccountDAO = ExampleAccountDAO(
         mutableMapOf(
