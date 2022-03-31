@@ -29,7 +29,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
         )
         val id = accountDAO.countAccounts() // If there are 0 accounts, ID=0, 1 accounts, ID=1...
 
-        val success = accountDAO.insertAccount(id, account)
+        val success = accountDAO.insertAccount(account)
 
         if (success) {
             // Send the account object, safe since they just made it, so they know all the information

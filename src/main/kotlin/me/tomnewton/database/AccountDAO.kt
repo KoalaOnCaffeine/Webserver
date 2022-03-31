@@ -16,13 +16,12 @@ interface AccountDAO {
     fun countAccounts(): Int
 
     /**
-     * Inserts an account into the records
-     * @param id the id for the new account
+     * Inserts an account into the records, auto-incrementing the ID
      * @param account the account to add
      * @return Whether the operation was successful
      */
 
-    fun insertAccount(id: Int, account: Account): Boolean
+    fun insertAccount(account: Account): Boolean
 
     /**
      * Get an account with a specified [id]

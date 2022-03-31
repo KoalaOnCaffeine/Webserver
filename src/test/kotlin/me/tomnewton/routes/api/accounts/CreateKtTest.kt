@@ -20,16 +20,16 @@ internal class CreateKtTest {
 
     @Test
     fun testCreateAbsentAccount() {
-        assertTrue(exampleDAO.insertAccount(2, sebastianStanAccount))
+        assertTrue(exampleDAO.insertAccount(sebastianStanAccount))
     }
 
     @Test
     fun testCreatePresentAccount() {
-        assertFalse(exampleDAO.insertAccount(0, sebastianStanAccount))
-        assertFalse(exampleDAO.insertAccount(1, sebastianStanAccount))
+        assertFalse(exampleDAO.insertAccount(sebastianStanAccount))
+        assertFalse(exampleDAO.insertAccount(sebastianStanAccount))
 
-        assertFalse(exampleDAO.insertAccount(0, elizabethOlsenAccount))
-        assertFalse(exampleDAO.insertAccount(0, chrisHemsworthAccount))
+        assertFalse(exampleDAO.insertAccount(elizabethOlsenAccount))
+        assertFalse(exampleDAO.insertAccount(chrisHemsworthAccount))
 
         assertEquals(elizabethOlsenAccount, exampleDAO.getAccountById(0))
         assertEquals(chrisHemsworthAccount, exampleDAO.getAccountById(1))

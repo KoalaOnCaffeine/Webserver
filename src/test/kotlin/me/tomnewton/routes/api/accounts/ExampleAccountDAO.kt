@@ -5,13 +5,15 @@ import me.tomnewton.shared.Account
 
 class ExampleAccountDAO(private val accounts: MutableMap<Int, Account> = mutableMapOf()) : AccountDAO {
 
+    private var nextID = 0
+
     override fun countAccounts(): Int {
         return accounts.size
     }
 
-    override fun insertAccount(id: Int, account: Account): Boolean {
+    override fun insertAccount(account: Account): Boolean {
         // Return true if the previous value was null, meaning nothing would be overwritten
-        return accounts.putIfAbsent(id, account) == null
+        return accounts.putIfAbsent(nextID++, account) == null
     }
 
     override fun getAccountById(id: Int) = accounts[id]
