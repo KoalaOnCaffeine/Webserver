@@ -19,7 +19,3 @@ fun main() {
         configureStatusPages()
     }.start(wait = true)
 }
-
-object Messages {
-    const val notFoundMessage: String = "{\"message\": \"This page does not exist\"}"
-}

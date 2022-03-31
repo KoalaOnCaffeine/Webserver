@@ -4,7 +4,7 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.server.response.*
-import me.tomnewton.Messages
+import me.tomnewton.shared.responses.PageNotFoundResponse
 
 fun Application.configureStatusPages() {
     install(StatusPages) {
@@ -12,7 +12,8 @@ fun Application.configureStatusPages() {
         // For any page which returned the not found code
         status(HttpStatusCode.NotFound) { call, _ ->
             // Respond with the notFoundMessage in a json format
-            call.respondText(Messages.notFoundMessage, ContentType.Application.Json, HttpStatusCode.NotFound)
+            val response = PageNotFoundResponse()
+            call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.NotFound)
         }
     }
 }

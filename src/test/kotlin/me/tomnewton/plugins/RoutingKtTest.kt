@@ -7,8 +7,8 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
-import me.tomnewton.Messages
 import me.tomnewton.routes.api.accounts.ExampleAccountDAO
+import me.tomnewton.shared.responses.PageNotFoundResponse
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -61,7 +61,12 @@ class RoutingKtTest {
                 // Response code should be the Not Found code, 404
                 assertEquals(HttpStatusCode.NotFound, response.status)
                 // Content of the page should be the notFoundMessage
-                runBlocking { assertEquals(Messages.notFoundMessage, response.body()) } // Avoid suspend fun
+                runBlocking {
+                    assertEquals(
+                        PageNotFoundResponse().toJsonObject(),
+                        response.body()
+                    )
+                } // Avoid suspend fun
             }
         }
     }
