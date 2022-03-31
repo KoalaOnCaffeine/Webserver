@@ -9,10 +9,4 @@ interface DataObject {
 
     fun toJsonObject(): String
 
-    /**
-     * Creates a json representation of the [DataObject], which does not contain sensitive information
-     * @return a json object containing only public information
-     */
-
-    fun toSensitiveJsonObject(): String
 }

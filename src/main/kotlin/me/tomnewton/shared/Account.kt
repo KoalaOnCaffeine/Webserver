@@ -13,12 +13,19 @@ data class Account(
     val username: String,
     val email: String,
     val password: String,
-    val dateOfBirth: String
+    val dateOfBirth: String,
+    val teamIDs: List<Int>,
+    val projectIDs: List<Int>,
+    val imageURL: String,
 ) : DataObject {
 
-    override fun toJsonObject() =
-        """{username: "$username", email: $email, password: "$password", dateOfBirth: "$dateOfBirth"}"""
+    override fun toJsonObject() = """
+            {
+                username: "$username",
+                email: "$email",
+                team_ids: ${teamIDs.joinToString(prefix = "[", postfix = "]")},
+                project_ids: ${projectIDs.joinToString(prefix = "[", postfix = "]")},
+                image_url: $imageURL
+            }""".trimIndent()
 
-    override fun toSensitiveJsonObject() =
-        """{username: $username}"""
 }
