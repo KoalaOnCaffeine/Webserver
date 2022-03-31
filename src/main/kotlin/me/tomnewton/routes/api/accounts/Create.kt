@@ -7,8 +7,8 @@ import io.ktor.server.routing.*
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.plugins.parseObject
 import me.tomnewton.shared.Account
-import me.tomnewton.shared.responses.Response
 import me.tomnewton.shared.responses.accounts.AccountCreateFailResponse
+import me.tomnewton.shared.responses.accounts.AccountCreateSuccessResponse
 
 fun Route.createAccount(accountDAO: AccountDAO) {
     post("/create") {
@@ -33,7 +33,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
 
         if (success) {
             // Send the account object, safe since they just made it, so they know all the information
-            val response = Response(0, "The account was created successfully", "{id: $id}")
+            val response = AccountCreateSuccessResponse(id)
             call.respondText(response.toJsonObject())
         } else {
             // Send appropriate error, such as the database failed
