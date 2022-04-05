@@ -23,7 +23,7 @@ data class Account(
     val imageURL: String,
 ) : DataObject {
 
-    override fun toJsonObject() = """ { username: "$username", email: "$email", team_ids: ${
+    override fun toJsonObject() = """ { id: $id username: "$username", email: "$email", team_ids: ${
         teamIDs.joinToString(
             prefix = "[", postfix = "]"
         )
