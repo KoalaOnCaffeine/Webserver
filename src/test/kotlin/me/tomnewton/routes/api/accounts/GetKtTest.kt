@@ -1,19 +1,22 @@
 package me.tomnewton.routes.api.accounts
 
 import me.tomnewton.database.AccountDAO
-import me.tomnewton.shared.Account
+import me.tomnewton.database.AccountDAOImpl
+import me.tomnewton.database.model.Account
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
 internal class GetKtTest {
 
-    private val elizabethOlsenAccount = Account("elizabeth_olsen", "", "", "", emptyList(), emptyList(), "")
-    private val chrisHemsworthAccount = Account("chris_hemsworth", "", "", "", emptyList(), emptyList(), "")
+    private val elizabethOlsenAccount =
+        Account(System.nanoTime(), "elizabeth_olsen", "", "", "", emptyList(), emptyList(), "")
+    private val chrisHemsworthAccount =
+        Account(System.nanoTime(), "chris_hemsworth", "", "", "", emptyList(), emptyList(), "")
 
-    private val exampleDAO: AccountDAO = ExampleAccountDAO(
+    private val exampleDAO: AccountDAO = AccountDAOImpl(
         mutableMapOf(
-            0 to elizabethOlsenAccount,
-            1 to chrisHemsworthAccount
+            0L to elizabethOlsenAccount,
+            1L to chrisHemsworthAccount
         )
     )
 

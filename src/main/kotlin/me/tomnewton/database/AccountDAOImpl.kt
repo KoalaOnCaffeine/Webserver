@@ -1,11 +1,9 @@
 package me.tomnewton.database
 
-import me.tomnewton.shared.Account
+import me.tomnewton.database.model.Account
 import java.util.concurrent.ThreadLocalRandom
 
-class AccountDAOImpl(private val accounts: MutableMap<Int, Account> = mutableMapOf()) : AccountDAO {
-
-    private var nextID = 0
+class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMapOf()) : AccountDAO {
 
     override fun countAccounts() = accounts.size
 
@@ -15,12 +13,12 @@ class AccountDAOImpl(private val accounts: MutableMap<Int, Account> = mutableMap
         if (ThreadLocalRandom.current().nextBoolean()) return false
 
         // Return true if the previous value was null, meaning nothing would be overwritten
-        return accounts.putIfAbsent(nextID++, account) == null
+        return accounts.putIfAbsent(account.id, account) == null
     }
 
-    override fun getAccountById(id: Int) = accounts[id]
+    override fun getAccountById(id: Long) = accounts[id]
 
-    override fun updateAccount(id: Int, account: Account): Boolean {
+    override fun updateAccount(id: Long, account: Account): Boolean {
         accounts[id] = account
         return true // This operation just doesn't fail like a database could
     }

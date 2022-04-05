@@ -1,6 +1,6 @@
 package me.tomnewton.database
 
-import me.tomnewton.shared.Account
+import me.tomnewton.database.model.Account
 
 /*
 https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm
@@ -29,7 +29,7 @@ interface AccountDAO {
      * @return The associated account else null
      */
 
-    fun getAccountById(id: Int): Account?
+    fun getAccountById(id: Long): Account?
 
     /**
      * Update the given [account] in the database
@@ -38,5 +38,5 @@ interface AccountDAO {
      * @return Whether the operation was successful
      */
 
-    fun updateAccount(id: Int, account: Account): Boolean
+    fun updateAccount(id: Long, account: Account): Boolean
 }

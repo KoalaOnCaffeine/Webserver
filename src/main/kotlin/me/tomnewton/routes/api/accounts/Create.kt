@@ -6,7 +6,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.plugins.parseObject
-import me.tomnewton.shared.Account
+import me.tomnewton.database.model.Account
 import me.tomnewton.shared.responses.accounts.AccountCreateFailResponse
 import me.tomnewton.shared.responses.accounts.AccountCreateSuccessResponse
 
@@ -19,6 +19,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
         val dateOfBirth: String by content
 
         val account = Account(
+            System.nanoTime(), // Should be unique enough?
             username,
             email,
             password,
@@ -27,13 +28,12 @@ fun Route.createAccount(accountDAO: AccountDAO) {
             listOf(), // Should be empty by default
             "https://i.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U" // Default image url
         )
-        val id = accountDAO.countAccounts() // If there are 0 accounts, ID=0, 1 accounts, ID=1...
 
         val success = accountDAO.insertAccount(account)
 
         if (success) {
             // Send the account object, safe since they just made it, so they know all the information
-            val response = AccountCreateSuccessResponse(id)
+            val response = AccountCreateSuccessResponse(account.id)
             call.respondText(response.toJsonObject())
         } else {
             // Send appropriate error, such as the database failed

@@ -1,4 +1,6 @@
-package me.tomnewton.shared
+package me.tomnewton.database.model
+
+import me.tomnewton.shared.DataObject
 
 /**
  * A data class for an account
@@ -10,6 +12,7 @@ package me.tomnewton.shared
  */
 
 data class Account(
+    val id: Long,
     val username: String,
     val email: String,
     val password: String,

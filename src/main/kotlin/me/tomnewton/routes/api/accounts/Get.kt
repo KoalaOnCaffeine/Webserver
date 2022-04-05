@@ -11,7 +11,7 @@ import me.tomnewton.shared.responses.accounts.AccountGetSuccessResponse
 
 fun Route.getAccount(accountDAO: AccountDAO) {
     get("/{id}") {
-        val accountID = call.parameter("id", String::toIntOrNull)
+        val accountID = call.parameter("id", String::toLongOrNull)
         if (accountID == null) {
             call.respondText("Invalid account ID")
             return@get
