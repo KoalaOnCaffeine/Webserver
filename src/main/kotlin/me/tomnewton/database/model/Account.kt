@@ -9,6 +9,9 @@ import me.tomnewton.shared.DataObject
  * @param email The email of the account
  * @param password The password of the account
  * @param dateOfBirth The date of birth of the owner of the account
+ * @param teamIDs The IDs of the team this user is in
+ * @param projectIDs The IDs of the projects this user is part of
+ * @param imageURL The url of the user's profile picture
  */
 
 data class Account(
