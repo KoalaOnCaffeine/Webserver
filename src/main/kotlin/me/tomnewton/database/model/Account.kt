@@ -4,7 +4,7 @@ import me.tomnewton.shared.DataObject
 
 /**
  * A data class for an account.
- * @param id the unique ID of the account
+ * @param id The unique ID of the account
  * @param username The username of the account
  * @param email The email of the account
  * @param password The password of the account
