@@ -29,6 +29,6 @@ data class Account(
         teamIDs.joinToString(
             prefix = "[", postfix = "]"
         )
-    }, "project_IDs": ${projectIDs.joinToString(prefix = "[", postfix = "]")}, "image_url": $imageURL }"""
+    }, "project_IDs": ${projectIDs.joinToString(prefix = "[", postfix = "]")}, "image_url": "$imageURL" }"""
 
 }
