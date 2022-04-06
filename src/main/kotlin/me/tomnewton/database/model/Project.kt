@@ -22,15 +22,15 @@ data class Project(
     val archived: Boolean,
     val cardIDs: List<Long>
 ) : DataObject {
-    override fun toJsonObject() = """ { id: $id, description: "$description", managerIDs: ${
+    override fun toJsonObject() = """ { "id": $id, "description": "$description", "managerIDs": ${
         managerIDs.joinToString(
             prefix = "[",
             postfix = "]"
         )
-    }, memberIDS: ${
+    }, "memberIDs": ${
         memberIDs.joinToString(
             prefix = "[",
             postfix = "]"
         )
-    }, imageURL: "$imageURL", archived: $archived, cardIDs: ${cardIDs.joinToString(prefix = "[", postfix = "]")} } """
+    }, "imageURL": "$imageURL", "archived": $archived, "cardIDs": ${cardIDs.joinToString(prefix = "[", postfix = "]")} } """
 }

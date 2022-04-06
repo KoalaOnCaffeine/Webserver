@@ -20,15 +20,15 @@ data class Team(
     val memberIDs: List<Long>,
     val imageURL: String
 ) : DataObject {
-    override fun toJsonObject() = """{ id: $id, description: "$description", projectIDs: ${
+    override fun toJsonObject() = """{ "id": $id, "description": "$description", "projectIDs": ${
         projectIDs.joinToString(
             prefix = "[",
             postfix = "]"
         )
-    }, managerIDs: ${
+    }, "managerIDs": ${
         managerIDs.joinToString(
             prefix = "[",
             postfix = "]"
         )
-    }, memberIDs: ${memberIDs.joinToString(prefix = "[", postfix = "]")}, imageURL: "$imageURL" }"""
+    }, "memberIDs": ${memberIDs.joinToString(prefix = "[", postfix = "]")}, "imageURL": "$imageURL" }"""
 }
