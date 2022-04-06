@@ -7,4 +7,4 @@ package me.tomnewton.shared.responses
  */
 
 open class ErrorResponse(code: Int, errorDescription: String) :
-    Response(code, "An error occurred", "{error: \"$errorDescription\"}")
+    Response(code, errorDescription, null)
