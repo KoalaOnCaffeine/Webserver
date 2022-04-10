@@ -2,11 +2,11 @@ package me.tomnewton.routes.api.accounts
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import me.tomnewton.ApplicationSettings
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.database.model.Account
 import me.tomnewton.plugins.parseObject
@@ -29,8 +29,8 @@ fun Route.createAccount(accountDAO: AccountDAO) {
         val dateOfBirth = content.getOrDefault("dateOfBirth", null) as String?
 
         if (setOf(username, email, password, dateOfBirth).size != 4) {
-            // One or more of them were null
-            call.respondText("Invalid request")
+            // One or more of them were null, tell them
+            call.respondText(AccountCreateFailResponse("Must provide a username, email, password and dateOfBirth field").toJsonObject())
             return@post
         }
 
@@ -41,16 +41,15 @@ fun Route.createAccount(accountDAO: AccountDAO) {
         val (valid, validateResponse) = validate(account)
 
         if (valid) {
-            val insertResponse = insert(account, accountDAO)
 
-            val token = JWT.create()
-                .withAudience("http://0.0.0.0:8080/")
-                .withIssuer("http://0.0.0.0:8080/api/accounts/create")
-                .withClaim("password", account.password)
+            // Create a JWT for the client to handle, with a shared secret
+            val token = JWT.create().withAudience(ApplicationSettings.audience).withIssuer(ApplicationSettings.issuer)
+                .withClaim("user_id", account.id)
                 .withExpiresAt(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // Expires after 7 days
-                .sign(Algorithm.HMAC256("somesecret"))
+                .sign(Algorithm.HMAC256("secret")) // Shared secret
 
-            call.response.cookies.append(Cookie("token", token, CookieEncoding.RAW))
+            val insertResponse = insert(account, accountDAO, token)
+
             call.respondText(insertResponse.toJsonObject())
 
         } else {
@@ -69,9 +68,9 @@ private fun validate(account: Account): Pair<Boolean, Response> {
     return true to EMPTY_RESPONSE
 }
 
-private fun insert(account: Account, accountDAO: AccountDAO): Response {
+private fun insert(account: Account, accountDAO: AccountDAO, token: String): Response {
     val success = accountDAO.insertAccount(account)
-    return if (success) AccountCreateSuccessResponse(account.id)
+    return if (success) AccountCreateSuccessResponse(account.id, token)
     else AccountCreateFailResponse("Unable to create the account. This is a server error - please try again")
 }
 
