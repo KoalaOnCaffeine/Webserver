@@ -13,9 +13,9 @@ fun main() {
     val accountDAO = AccountDAOImpl()
 
     embeddedServer(Netty, port = 8080, host = "localhost") {
-        configureRouting(accountDAO)
         configureSecurity()
         configureHTTP()
         configureStatusPages()
+        configureRouting(accountDAO)
     }.start(wait = true)
 }
