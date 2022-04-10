@@ -7,7 +7,6 @@ import me.tomnewton.database.AccountDAO
 import me.tomnewton.routes.api.apiRoutes
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import kotlin.reflect.KProperty
 
 fun Application.configureRouting(accountDAO: AccountDAO) {
 
@@ -27,10 +26,6 @@ fun <T> ApplicationCall.parameter(name: String, transform: (String) -> T?): T? {
     val value = parameter(name)
     return if (value == null) null
     else transform(value)
-}
-
-operator fun <T> JSONObject.getValue(ref: Nothing, property: KProperty<*>): T? {
-    return this[property.name] as T?
 }
 
 fun parseObject(json: String): JSONObject {

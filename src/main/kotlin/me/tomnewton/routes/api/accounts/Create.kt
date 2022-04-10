@@ -1,5 +1,8 @@
 package me.tomnewton.routes.api.accounts
 
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -12,6 +15,7 @@ import me.tomnewton.shared.responses.Response
 import me.tomnewton.shared.responses.accounts.AccountCreateFailResponse
 import me.tomnewton.shared.responses.accounts.AccountCreateSuccessResponse
 import java.lang.Character.isLetter
+import java.util.*
 
 internal const val defaultImage =
     "https://i.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
@@ -19,20 +23,36 @@ internal const val defaultImage =
 fun Route.createAccount(accountDAO: AccountDAO) {
     post("/create") {
         val content = parseObject(call.receiveText())
-        val username: String by content
-        val email: String by content
-        val password: String by content
-        val dateOfBirth: String by content
+        val username = content.getOrDefault("username", null) as String?
+        val email = content.getOrDefault("email", null) as String?
+        val password = content.getOrDefault("password", null) as String?
+        val dateOfBirth = content.getOrDefault("dateOfBirth", null) as String?
+
+        if (setOf(username, email, password, dateOfBirth).size != 4) {
+            // One or more of them were null
+            call.respondText("Invalid request")
+            return@post
+        }
 
         // Projects and teams should be empty after creating an account
         val account =
-            Account(System.nanoTime(), username, email, password, dateOfBirth, listOf(), listOf(), defaultImage)
+            Account(System.nanoTime(), username!!, email!!, password!!, dateOfBirth!!, listOf(), listOf(), defaultImage)
 
         val (valid, validateResponse) = validate(account)
 
-        if(valid) {
+        if (valid) {
             val insertResponse = insert(account, accountDAO)
+
+            val token = JWT.create()
+                .withAudience("http://0.0.0.0:8080/")
+                .withIssuer("http://0.0.0.0:8080/api/accounts/create")
+                .withClaim("password", account.password)
+                .withExpiresAt(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // Expires after 7 days
+                .sign(Algorithm.HMAC256("somesecret"))
+
+            call.response.cookies.append(Cookie("token", token, CookieEncoding.RAW))
             call.respondText(insertResponse.toJsonObject())
+
         } else {
             call.respondText(validateResponse.toJsonObject())
         }
@@ -118,11 +138,9 @@ fun emailContainsValidDomain(email: String): Boolean {
 
 // Password must contain a lowercase, capital, punctuation, number, and be at least 7 characters long
 fun isValidPassword(password: String): Boolean {
-    return containsLowerCase(password)
-            && containsCapital(password)
-            && containsPunctuation(password)
-            && containsDigit(password)
-            && passwordIsValidLength(password)
+    return containsLowerCase(password) && containsCapital(password) && containsPunctuation(password) && containsDigit(
+        password
+    ) && passwordIsValidLength(password)
 }
 
 // Password must contain a lowercase letter, which is any letter whose lowercase is itself
