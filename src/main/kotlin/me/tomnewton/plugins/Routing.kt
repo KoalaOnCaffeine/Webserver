@@ -29,6 +29,7 @@ fun <T> ApplicationCall.parameter(name: String, transform: (String) -> T?): T? {
 }
 
 fun parseObject(json: String): JSONObject {
+    if (json.isBlank()) return JSONObject()
     val parser = JSONParser()
     return parser.parse(json) as JSONObject
 }
