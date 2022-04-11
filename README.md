@@ -1,2 +1,2 @@
 # Webserver
-Kotlin webserver using Ktor for a school proejct
+Kotlin webserver using Ktor for a school project
