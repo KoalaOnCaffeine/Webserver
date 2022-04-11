@@ -14,8 +14,8 @@ fun main() {
 
     embeddedServer(Netty, port = 8080, host = "localhost") {
         configureSecurity()
+        configureRouting(accountDAO)
         configureHTTP()
         configureStatusPages()
-        configureRouting(accountDAO)
     }.start(wait = true)
 }
