@@ -14,18 +14,21 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 internal const val validUsername = "elizabeth_olsen"
-internal const val usernameTooLong = "elizabeth_olsen_wanda" // > 20 chars
+internal const val usernameTooLong = "elizabeth_olsen_wanda" // >20 chars
 internal const val usernameInvalidChars = "elizabeth-olsen" // _ is invalid
 
 internal const val validEmail = "elizabeth@olsen.co.po"
-internal const val emailNoDomain = "elizabeth@"
-internal const val emailInvalidDomain = "elizabeth@co"
-internal const val emailJustUser = "elizabeth"
-internal const val emailJustDomain = "@co.po"
+internal const val emailNoDomain = "elizabeth@" // No domain
+internal const val emailInvalidDomain = "elizabeth@co" // Invalid domain
+internal const val emailJustUser = "elizabeth" // No @
+internal const val emailJustDomain = "@co.po" // No user
 
 internal const val validPassword = "P0!INTBr3ak!"
-internal const val passwordTooShort = "W4nda!" //
-
+internal const val passwordTooShort = "W4nda!" // <7 characters
+internal const val passwordNoPunctuation = "P01NTBr3ak" // No punctuation
+internal const val passwordNoNumbers = "POINTBreak" // No numbers
+internal const val passwordNoCapitals = "p01ntbr3ak" // No capitals
+internal const val passwordNoLowercases = "P0INTBR3AK" // No lowercases
 
 internal const val validDateOfBirth = "16/02/1989"
 internal val dateOfBirthTooYoung = SimpleDateFormat("dd/MM/yyyy").format(Date()) // Current date is too young
