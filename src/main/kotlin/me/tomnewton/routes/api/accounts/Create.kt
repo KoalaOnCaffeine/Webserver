@@ -2,6 +2,7 @@ package me.tomnewton.routes.api.accounts
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -30,7 +31,10 @@ fun Route.createAccount(accountDAO: AccountDAO) {
 
         if (setOf(username, email, password, dateOfBirth).size != 4) {
             // One or more of them were null, tell them
-            call.respondText(AccountCreateFailResponse("Must provide a username, email, password and dateOfBirth field").toJsonObject())
+            call.respondText(
+                AccountCreateFailResponse("Must provide a username, email, password and dateOfBirth field").toJsonObject(),
+                ContentType.Application.Json
+            )
             return@post
         }
 
@@ -50,10 +54,10 @@ fun Route.createAccount(accountDAO: AccountDAO) {
 
             val insertResponse = insert(account, accountDAO, token)
 
-            call.respondText(insertResponse.toJsonObject())
+            call.respondText(insertResponse.toJsonObject(), ContentType.Application.Json)
 
         } else {
-            call.respondText(validateResponse.toJsonObject())
+            call.respondText(validateResponse.toJsonObject(), ContentType.Application.Json)
         }
     }
 }
