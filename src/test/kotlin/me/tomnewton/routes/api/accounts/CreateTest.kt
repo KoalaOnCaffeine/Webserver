@@ -30,7 +30,7 @@ internal const val passwordTooShort = "W4nda!" //
 internal const val validDateOfBirth = "16/02/1989"
 internal val dateOfBirthTooYoung = SimpleDateFormat("dd/MM/yyyy").format(Date()) // Current date is too young
 
-class NewCreateTest {
+class CreateTest {
 
     private fun postWith(
         username: String,
