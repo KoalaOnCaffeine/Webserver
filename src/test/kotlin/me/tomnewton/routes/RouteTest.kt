@@ -1,5 +1,6 @@
 package me.tomnewton.routes
 
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -23,15 +24,19 @@ internal fun test(
             configureHTTP()
             configureStatusPages()
         }
-        val response = client.request {
-            // Let the builder edit the request, then set the method and route
-            builder(this)
-            this.method = method
-            url(route)
+        try {
+
+            val response = client.request {
+                // Let the builder edit the request, then set the method and route
+                builder(this)
+                this.method = method
+                url(route)
+            }
+
+            // Run the test method on the response
+            test(response)
+        } catch (e: ClientRequestException) {
+            // This should happen for 400 responses
         }
-
-        // Run the test method on the response
-        test(response)
-
     }
 }
