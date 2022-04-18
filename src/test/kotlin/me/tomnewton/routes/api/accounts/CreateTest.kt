@@ -32,8 +32,8 @@ internal const val passwordNoNumbers = "POINTBreak" // No numbers
 internal const val passwordNoCapitals = "p01ntbr3ak" // No capitals
 internal const val passwordNoLowercases = "P0INTBR3AK" // No lowercases
 
-internal const val validDateOfBirth = "16/02/1989"
-internal val dateOfBirthTooYoung = SimpleDateFormat("dd/MM/yyyy").format(Date()) // Current date is too young
+internal const val validDateOfBirth = "16-02-1989"
+internal val dateOfBirthTooYoung = SimpleDateFormat("dd-MM-yyyy").format(Date()) // Current date is too young
 
 class CreateTest {
 
