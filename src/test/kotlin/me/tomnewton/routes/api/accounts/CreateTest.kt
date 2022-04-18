@@ -34,8 +34,6 @@ internal const val passwordNoLowercases = "P0INTBR3AK" // No lowercases
 
 internal const val validDateOfBirth = "16/02/1989"
 internal val dateOfBirthTooYoung = SimpleDateFormat("dd/MM/yyyy").format(Date()) // Current date is too young
-internal val dateOfBirthInvalid =
-    SimpleDateFormat("dd/MM/yyyy").format(Date(System.currentTimeMillis() + 86400000)) // One year from now hasn't happened
 
 class CreateTest {
 
@@ -206,13 +204,6 @@ class CreateTest {
             dateOfBirthTooYoung,
             HttpStatusCode.BadRequest,
             ACCOUNT_CREATE_FAIL
-        )
-    }
-
-    @Test
-    fun testDateOfBirthInvalid() = assertTrue {
-        test(
-            validUsername, validEmail, validPassword, dateOfBirthInvalid, HttpStatusCode.BadRequest, ACCOUNT_CREATE_FAIL
         )
     }
 
