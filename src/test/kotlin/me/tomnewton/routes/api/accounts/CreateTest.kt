@@ -3,6 +3,7 @@ package me.tomnewton.routes.api.accounts
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.util.date.*
 import kotlinx.coroutines.runBlocking
 import me.tomnewton.plugins.parseObject
 import me.tomnewton.routes.test
@@ -10,6 +11,7 @@ import me.tomnewton.shared.responses.accounts.ACCOUNT_CREATE_FAIL
 import me.tomnewton.shared.responses.accounts.ACCOUNT_CREATE_SUCCESS
 import org.junit.Test
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -33,6 +35,9 @@ internal const val passwordNoCapitals = "p01ntbr3ak" // No capitals
 internal const val passwordNoLowercases = "P0INTBR3AK" // No lowercases
 
 internal const val validDateOfBirth = "16-02-1989"
+internal val dateOfBirthBorderline = SimpleDateFormat("dd-MM-yyyy").format(
+    Calendar.getInstance().toDate(System.currentTimeMillis()).minus(Duration.ofDays(365).toMillis()).toJvmDate()
+)
 internal val dateOfBirthTooYoung = SimpleDateFormat("dd-MM-yyyy").format(Date()) // Current date is too young
 
 class CreateTest {
@@ -195,6 +200,17 @@ class CreateTest {
         )
     }
 
+    @Test
+    fun testDateOfBirthBorderline() = assertTrue {
+        test(
+            validUsername,
+            validEmail,
+            validPassword,
+            dateOfBirthBorderline,
+            HttpStatusCode.OK,
+            ACCOUNT_CREATE_SUCCESS
+        )
+    }
     @Test
     fun testDateOfBirthTooYoung() = assertTrue {
         test(
