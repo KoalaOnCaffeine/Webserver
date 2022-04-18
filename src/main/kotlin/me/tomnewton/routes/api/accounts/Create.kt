@@ -33,7 +33,8 @@ fun Route.createAccount(accountDAO: AccountDAO) {
             // One or more of them were null, tell them
             call.respondText(
                 AccountCreateFailResponse("Must provide a username, email, password and dateOfBirth field").toJsonObject(),
-                ContentType.Application.Json
+                ContentType.Application.Json,
+                HttpStatusCode.BadRequest
             )
             return@post
         }
@@ -57,7 +58,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
             call.respondText(insertResponse.toJsonObject(), ContentType.Application.Json)
 
         } else {
-            call.respondText(validateResponse.toJsonObject(), ContentType.Application.Json)
+            call.respondText(validateResponse.toJsonObject(), ContentType.Application.Json, HttpStatusCode.BadRequest)
         }
     }
 }
