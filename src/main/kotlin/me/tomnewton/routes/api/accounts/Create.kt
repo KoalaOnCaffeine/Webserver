@@ -86,10 +86,12 @@ fun isValidUsername(username: String): Boolean {
     return usernameIsValidLength(username) && usernameOnlyValidChars(username)
 }
 
+// Username in the range of 1 to 20 (both inclusive)
 fun usernameIsValidLength(username: String): Boolean {
     return username.length in 1..20
 }
 
+// Username doesn't contain any characters that aren't valid
 fun usernameOnlyValidChars(username: String): Boolean {
     return !username.any { !isValidUsernameCharacter(it) }
 }
@@ -97,11 +99,11 @@ fun usernameOnlyValidChars(username: String): Boolean {
 // EMAIL
 
 // https://www.w3resource.com/javascript/form/email-validation.php
-
 fun isValidEmail(email: String): Boolean {
     return emailContainsValidUsername(email) && emailContainsValidDomain(email)
 }
 
+// Checks that the email contains a valid username before the @
 fun emailContainsValidUsername(email: String): Boolean {
     if (email.isEmpty()) return false // Must have a character there
     val domainStart = email.indexOf('@')
@@ -118,6 +120,7 @@ fun emailContainsValidUsername(email: String): Boolean {
     return username.matches(Regex("^([-!#\$%&'*/=?^`{|}_\"+A-Za-z0-9]+\\.)*[-!#\$%&'*/=?^`{|}_\"+A-Za-z0-9]+\$"))
 }
 
+// Checks that the email contains a valid domain after the @
 fun emailContainsValidDomain(email: String): Boolean {
     // this method needs something of the form @x.y to just validate the domain, regardless of any other part
     if (email.length < 4) return false
@@ -180,6 +183,7 @@ fun isValidDateOfBirth(dateOfBirth: String): Boolean {
     return dateIsOldEnough(date)
 }
 
+// Date was at least 13 years ago
 fun dateIsOldEnough(date: Date): Boolean {
     return Calendar.getInstance().toDate(date.time).year - Calendar.getInstance()
         .toDate(System.currentTimeMillis()).year >= 13
