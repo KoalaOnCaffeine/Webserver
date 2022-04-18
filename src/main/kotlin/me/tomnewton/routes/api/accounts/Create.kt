@@ -7,6 +7,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.date.*
 import me.tomnewton.ApplicationSettings
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.database.model.Account
@@ -16,6 +17,7 @@ import me.tomnewton.shared.responses.Response
 import me.tomnewton.shared.responses.accounts.AccountCreateFailResponse
 import me.tomnewton.shared.responses.accounts.AccountCreateSuccessResponse
 import java.lang.Character.isLetter
+import java.text.SimpleDateFormat
 import java.util.*
 
 internal const val defaultImage =
@@ -67,8 +69,7 @@ private fun validate(account: Account): Pair<Boolean, Response> {
     if (!isValidUsername(account.username)) return false to AccountCreateFailResponse("Username contain only letters, digits and underscores, and be a maximum of 20 characters long")
     if (!isValidEmail(account.email)) return false to AccountCreateFailResponse("Invalid email")
     if (!isValidPassword(account.password)) return false to AccountCreateFailResponse("Password must contain a capital, punctuation, number and be at least 7 characters long")
-
-    // TODO Check date of birth and create that function
+    if (!isValidDateOfBirth(account.dateOfBirth)) return false to AccountCreateFailResponse("Invalid date of birth. You must be at least 13 years old to create an account")
 
     return true to EMPTY_RESPONSE
 }
@@ -175,7 +176,13 @@ fun passwordIsValidLength(password: String): Boolean {
 // DATE OF BIRTH
 
 fun isValidDateOfBirth(dateOfBirth: String): Boolean {
-    return true
+    val date = SimpleDateFormat("dd/MM/yyyy").parse(dateOfBirth)
+    return dateIsOldEnough(date)
+}
+
+fun dateIsOldEnough(date: Date): Boolean {
+    return Calendar.getInstance().toDate(date.time).year - Calendar.getInstance()
+        .toDate(System.currentTimeMillis()).year >= 13
 }
 
 /*
