@@ -7,8 +7,9 @@ import java.io.File
 fun Route.staticRoutes() {
     // Serve under the root directory
     static("/") {
-        // Change this to an environmental variable?
-        staticRootFolder = File("C:/Users/Tom/IdeaProjects/clientside/dist/")
+        // staticRoot=C:\Users\tomto\IdeaProjects\clientside\dist
+        val staticRoot = System.getenv("staticRoot")
+        staticRootFolder = File(staticRoot)
         files(".") // Serve all by default
         serveWithoutExtension(staticRootFolder!!)
     }
