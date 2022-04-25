@@ -1,17 +1,15 @@
 package me.tomnewton.routes.api.accounts
 
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.date.*
-import me.tomnewton.ApplicationSettings
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.database.model.Account
 import me.tomnewton.plugins.parseObject
+import me.tomnewton.routes.api.createTokenFor
 import me.tomnewton.shared.responses.EMPTY_RESPONSE
 import me.tomnewton.shared.responses.Response
 import me.tomnewton.shared.responses.accounts.AccountCreateFailResponse
@@ -50,10 +48,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
         if (valid) {
 
             // Create a JWT for the client to handle, with a shared secret
-            val token = JWT.create().withAudience(ApplicationSettings.audience).withIssuer(ApplicationSettings.issuer)
-                .withClaim("user_id", account.id)
-                .withExpiresAt(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7)) // Expires after 7 days
-                .sign(Algorithm.HMAC256("secret")) // Shared secret
+            val token = createTokenFor(account.id)
 
             val insertResponse = insert(account, accountDAO, token)
 
