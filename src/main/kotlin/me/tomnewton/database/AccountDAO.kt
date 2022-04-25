@@ -32,6 +32,14 @@ interface AccountDAO {
     fun getAccountById(id: Long): Account?
 
     /**
+     * Gets an account with a specified [username]
+     * @param username the username of the account
+     * @return The associated account else null
+     */
+
+    fun getAccountByUsername(username: String): Account?
+
+    /**
      * Update the given [account] in the database
      * @param id the id of the account to update
      * @param account The account to update
