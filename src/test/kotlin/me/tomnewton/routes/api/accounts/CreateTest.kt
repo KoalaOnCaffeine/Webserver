@@ -225,7 +225,7 @@ class CreateTest {
     }
 
     @Test
-    fun testDateOfBirthWayTooYoung() = assertTrue {
+    fun testDateOfBirthWayTooOld() = assertTrue {
         test(
             validUsername,
             validEmail,
