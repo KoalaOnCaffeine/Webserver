@@ -39,6 +39,9 @@ internal val dateOfBirthBorderline = SimpleDateFormat("dd-MM-yyyy").format(
     Calendar.getInstance().toDate(System.currentTimeMillis()).minus(Duration.ofDays(365).toMillis()).toJvmDate()
 )
 internal val dateOfBirthTooYoung = SimpleDateFormat("dd-MM-yyyy").format(Date()) // Current date is too young
+internal val dateOfBirthWayTooOld = SimpleDateFormat("dd-MM-yyyy").format(
+    Date((System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 365.25 * 150).toLong())
+)
 
 class CreateTest {
 
@@ -137,7 +140,9 @@ class CreateTest {
 
     @Test
     fun testEmailJustDomain() = assertTrue {
-        test(validUsername, emailJustDomain, validPassword, validDateOfBirth, HttpStatusCode.BadRequest, DEFAULT_PORT)
+        test(
+            validUsername, emailJustDomain, validPassword, validDateOfBirth, HttpStatusCode.BadRequest, DEFAULT_PORT
+        )
     }
 
     @Test
@@ -203,14 +208,10 @@ class CreateTest {
     @Test
     fun testDateOfBirthBorderline() = assertTrue {
         test(
-            validUsername,
-            validEmail,
-            validPassword,
-            dateOfBirthBorderline,
-            HttpStatusCode.OK,
-            ACCOUNT_CREATE_SUCCESS
+            validUsername, validEmail, validPassword, dateOfBirthBorderline, HttpStatusCode.OK, ACCOUNT_CREATE_SUCCESS
         )
     }
+
     @Test
     fun testDateOfBirthTooYoung() = assertTrue {
         test(
@@ -223,4 +224,15 @@ class CreateTest {
         )
     }
 
+    @Test
+    fun testDateOfBirthWayTooYoung() = assertTrue {
+        test(
+            validUsername,
+            validEmail,
+            validPassword,
+            dateOfBirthWayTooOld,
+            HttpStatusCode.BadRequest,
+            ACCOUNT_CREATE_FAIL
+        )
+    }
 }

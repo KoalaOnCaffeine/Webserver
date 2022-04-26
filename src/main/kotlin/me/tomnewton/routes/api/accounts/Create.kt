@@ -175,13 +175,19 @@ fun passwordIsValidLength(password: String): Boolean {
 
 fun isValidDateOfBirth(dateOfBirth: String): Boolean {
     val date = SimpleDateFormat("dd-MM-yyyy").parse(dateOfBirth)
-    return dateIsOldEnough(date)
+    return dateIsOldEnough(date) && dateIsYoungEnough(date)
 }
 
 // Date was at least 13 years ago
 fun dateIsOldEnough(date: Date): Boolean {
     val offsetDate = Calendar.getInstance().toDate(System.currentTimeMillis() - date.time)
     return offsetDate.year - 1970 >= 13
+}
+
+// Date was under 150 years old (mostly believable)
+fun dateIsYoungEnough(date: Date): Boolean {
+    val offsetDate = Calendar.getInstance().toDate(System.currentTimeMillis() - date.time)
+    return offsetDate.year - 1970 <= 150
 }
 
 /*
