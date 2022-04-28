@@ -174,7 +174,7 @@ fun passwordIsValidLength(password: String): Boolean {
 // DATE OF BIRTH
 
 fun isValidDateOfBirth(dateOfBirth: String): Boolean {
-    val date = SimpleDateFormat("dd-MM-yyyy").parse(dateOfBirth)
+    val date = SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth.replace('/', '-'))
     return dateIsOldEnough(date) && dateIsYoungEnough(date)
 }
 
