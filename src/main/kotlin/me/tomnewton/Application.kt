@@ -12,7 +12,7 @@ fun main() {
 
     val accountDAO = AccountDAOImpl()
 
-    embeddedServer(Netty, port = 8080, host = "localhost") {
+    embeddedServer(Netty, port = 8080, host = ApplicationSettings.domain) {
         configureSecurity()
         configureRouting(accountDAO)
         configureHTTP()
