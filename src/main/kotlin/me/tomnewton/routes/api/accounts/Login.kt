@@ -25,39 +25,37 @@ fun Route.login(accountDAO: AccountDAO) {
             call.respondText("Hello, $username")
         }
     }
-    authenticate("auth-jwt") {
-        post("/login") {
-            val content = parseObject(call.receiveText())
-            val username = content.getOrDefault("username", null) as String?
-            val password = content.getOrDefault("password", null) as String?
-            if (setOf(username, password).size != 2) {
-                call.respondText(
-                    AccountLoginFailResponse("You must provide a username and password to log in").toJsonObject(),
-                    ContentType.Application.Json,
-                    HttpStatusCode.BadRequest
-                )
-                return@post
-            }
-            val account = accountDAO.getAccountByUsername(username!!)
-            if (account == null) {
-                call.respondText(
-                    AccountLoginFailResponse("No account found with that username").toJsonObject(),
-                    ContentType.Application.Json,
-                    HttpStatusCode.BadRequest
-                )
-                return@post
-            }
-            if (account.password != password) {
-                call.respondText(
-                    AccountLoginFailResponse("Invalid username or password").toJsonObject(),
-                    ContentType.Application.Json,
-                    HttpStatusCode.BadRequest
-                )
-                return@post
-            }
-            val token = createTokenFor(account.id)
-            // Respond with the token claim and let the client take them to the dashboard
-            call.respondText(AccountLoginSuccessResponse(token).toJsonObject(), ContentType.Application.Json)
+    post("/login") {
+        val content = parseObject(call.receiveText())
+        val username = content.getOrDefault("username", null) as String?
+        val password = content.getOrDefault("password", null) as String?
+        if (setOf(username, password).size != 2) {
+            call.respondText(
+                AccountLoginFailResponse("You must provide a username and password to log in").toJsonObject(),
+                ContentType.Application.Json,
+                HttpStatusCode.BadRequest
+            )
+            return@post
         }
+        val account = accountDAO.getAccountByUsername(username!!)
+        if (account == null) {
+            call.respondText(
+                AccountLoginFailResponse("No account found with that username").toJsonObject(),
+                ContentType.Application.Json,
+                HttpStatusCode.BadRequest
+            )
+            return@post
+        }
+        if (account.password != password) {
+            call.respondText(
+                AccountLoginFailResponse("Invalid username or password").toJsonObject(),
+                ContentType.Application.Json,
+                HttpStatusCode.BadRequest
+            )
+            return@post
+        }
+        val token = createTokenFor(account.id)
+        // Respond with the token claim and let the client take them to the dashboard
+        call.respondText(AccountLoginSuccessResponse(token).toJsonObject(), ContentType.Application.Json)
     }
 }
