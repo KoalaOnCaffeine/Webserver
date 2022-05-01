@@ -3,15 +3,16 @@ package me.tomnewton.plugins
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import me.tomnewton.database.AccountDAO
+import me.tomnewton.database.TeamDAO
 import me.tomnewton.routes.api.apiRoutes
 import me.tomnewton.routes.staticRoutes
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 
-fun Application.configureRouting(accountDAO: AccountDAO) {
+fun Application.configureRouting(accountDAO: AccountDAO, teamDAO: TeamDAO) {
 
     routing {
-        apiRoutes(accountDAO)
+        apiRoutes(accountDAO, teamDAO)
         staticRoutes()
     }
 }
