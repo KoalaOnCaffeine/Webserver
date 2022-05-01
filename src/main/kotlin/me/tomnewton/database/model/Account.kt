@@ -20,8 +20,8 @@ data class Account(
     val email: String,
     val password: String,
     val dateOfBirth: String,
-    val teamIDs: List<Int>,
-    val projectIDs: List<Int>,
+    val teamIDs: List<Long>,
+    val projectIDs: List<Long>,
     val imageURL: String,
 ) : DataObject {
 
