@@ -17,6 +17,7 @@ import me.tomnewton.shared.responses.accounts.AccountCreateSuccessResponse
 import java.lang.Character.isLetter
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.logging.Logger
 
 internal const val defaultImage =
     "https://i.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U"
@@ -31,6 +32,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
 
         if (setOf(username, email, password, dateOfBirth).size != 4) {
             // One or more of them were null, tell them
+            Logger.getGlobal().info("Account create fail - not all information provided")
             call.respondText(
                 AccountCreateFailResponse("Must provide a username, email, password and dateOfBirth field").toJsonObject(),
                 ContentType.Application.Json,
@@ -51,10 +53,11 @@ fun Route.createAccount(accountDAO: AccountDAO) {
             val token = createTokenFor(account.id)
 
             val insertResponse = insert(account, accountDAO, token)
-
+            Logger.getGlobal().info("Account created successfully")
             call.respondText(insertResponse.toJsonObject(), ContentType.Application.Json)
 
         } else {
+            Logger.getGlobal().info("Account create fail - invalid account details")
             call.respondText(validateResponse.toJsonObject(), ContentType.Application.Json, HttpStatusCode.BadRequest)
         }
     }
