@@ -15,6 +15,10 @@ class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMa
         val absent = accounts.putIfAbsent(account.id, account)
         if (absent == null) {
             accountsByUsername[account.username] = account
+            // TODO remove - creates a team with ID 0
+            with(account) {
+                updateAccount(id, Account(id, username, email, password, dateOfBirth, listOf(0), projectIDs, imageURL))
+            }
             return true
         }
         return false
@@ -27,6 +31,6 @@ class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMa
     override fun updateAccount(id: Long, account: Account): Boolean {
         accounts[id] = account
         accountsByUsername[account.username] = account
-        return true // This operation just doesn't fail like a database could
+        return true // This operation just doesn't fail like a database could todo check if there was an account
     }
 }
