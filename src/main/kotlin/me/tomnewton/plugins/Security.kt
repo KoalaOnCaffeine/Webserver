@@ -20,7 +20,7 @@ fun Application.configureSecurity() {
             )
 
             validate { credential ->
-                if (credential.payload.getClaim("username").asString() != "") JWTPrincipal(credential.payload) else null
+                if (credential.payload.getClaim("user_id").asString() != "") JWTPrincipal(credential.payload) else null
             }
 
             challenge { _, _ ->
