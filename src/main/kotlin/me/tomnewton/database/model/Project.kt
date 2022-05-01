@@ -32,5 +32,10 @@ data class Project(
             prefix = "[",
             postfix = "]"
         )
-    }, "imageURL": "$imageURL", "archived": $archived, "cardIDs": ${cardIDs.joinToString(prefix = "[", postfix = "]")} } """
+    }, "imageURL": "$imageURL", "archived": $archived, "cardIDs": ${
+        cardIDs.joinToString(
+            prefix = "[",
+            postfix = "]"
+        )
+    } } """
 }

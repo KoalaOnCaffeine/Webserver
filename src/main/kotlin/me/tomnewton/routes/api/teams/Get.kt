@@ -20,7 +20,7 @@ fun Route.getTeam(accountDAO: AccountDAO, teamDAO: TeamDAO) {
             if (account.teamIDs.contains(teamID)) {
                 Logger.getGlobal().info("Team found")
                 val team = teamDAO.getTeamById(teamID)
-                if(team == null) {
+                if (team == null) {
                     Logger.getGlobal().info("Team found but like not found")
                     call.respondText("No team with that ID exists")
                 } else {

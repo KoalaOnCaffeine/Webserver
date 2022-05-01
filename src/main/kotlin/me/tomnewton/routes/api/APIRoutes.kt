@@ -19,7 +19,7 @@ import java.util.*
 fun Route.apiRoutes(accountDAO: AccountDAO, teamDAO: TeamDAO) {
     route("/api") {
         route("/accounts") { accountRoutes(accountDAO) }
-        route("/teams") { teamRoutes(accountDAO, teamDAO)}
+        route("/teams") { teamRoutes(accountDAO, teamDAO) }
     }
 }
 

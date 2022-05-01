@@ -1,6 +1,5 @@
 package me.tomnewton.database
 
-import me.tomnewton.database.model.Account
 import me.tomnewton.database.model.Team
 
 class TeamDAOImpl(private val teams: MutableMap<Long, Team> = mutableMapOf()) : TeamDAO {
