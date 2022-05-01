@@ -12,6 +12,12 @@ import java.util.logging.Logger
 
 fun Route.getTeam(accountDAO: AccountDAO, teamDAO: TeamDAO) {
     authenticate("auth-jwt") {
+        get("/") {
+            // Return authenticated user's teams
+            val principal = call.principal<JWTPrincipal>()!!
+            val userID = principal.payload.getClaim("user_id").asLong()
+            call.respondText(accountDAO.getAccountById(userID)!!.teamIDs.joinToString(",", "{", "}"))
+        }
         get("/{id}") {
             val principal = call.principal<JWTPrincipal>()!!
             val userID = principal.payload.getClaim("user_id").asLong()
