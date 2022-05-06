@@ -8,6 +8,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import me.tomnewton.ApplicationSettings
+import me.tomnewton.shared.responses.InvalidTokenResponse
 
 fun Application.configureSecurity() {
 
@@ -24,7 +25,7 @@ fun Application.configureSecurity() {
             }
 
             challenge { _, _ ->
-                call.respond(HttpStatusCode.Unauthorized, "Token is either invalid or has expired")
+                call.respond(HttpStatusCode.Unauthorized, InvalidTokenResponse().toJsonObject())
             }
 
         }
