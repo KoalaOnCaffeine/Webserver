@@ -1,5 +1,6 @@
 package me.tomnewton.routes.api.teams
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -16,7 +17,9 @@ fun Route.getTeam(accountDAO: AccountDAO, teamDAO: TeamDAO) {
             // Return authenticated user's teams
             val principal = call.principal<JWTPrincipal>()!!
             val userID = principal.payload.getClaim("user_id").asLong()
-            call.respondText(accountDAO.getAccountById(userID)!!.teamIDs.joinToString(",", "{", "}"))
+            val teamArray = accountDAO.getAccountById(userID)!!.teamIDs.mapNotNull { teamDAO.getTeamById(it)?.toJsonObject() }
+                .joinToString(",", "[", "]") { it }
+            call.respondText(teamArray, ContentType.Application.Json, HttpStatusCode.Accepted)
         }
         get("/{id}") {
             val principal = call.principal<JWTPrincipal>()!!
