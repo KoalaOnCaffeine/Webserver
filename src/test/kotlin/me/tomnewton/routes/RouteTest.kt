@@ -6,6 +6,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import me.tomnewton.database.AccountDAOTestImpl
+import me.tomnewton.database.TeamDAOTestImpl
 import me.tomnewton.plugins.configureHTTP
 import me.tomnewton.plugins.configureRouting
 import me.tomnewton.plugins.configureSecurity
@@ -16,11 +17,12 @@ internal fun test(
     method: HttpMethod, route: String, builder: HttpRequestBuilder.() -> Unit, test: HttpResponse.() -> Unit
 ) {
     val accountDAO = AccountDAOTestImpl()
+    val teamDAO = TeamDAOTestImpl()
     testApplication {
         application {
             // Install all the plugins
             configureSecurity()
-            configureRouting(accountDAO)
+            configureRouting(accountDAO, teamDAO)
             configureHTTP()
             configureStatusPages()
         }
