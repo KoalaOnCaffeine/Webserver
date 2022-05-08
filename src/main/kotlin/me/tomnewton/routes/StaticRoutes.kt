@@ -21,8 +21,9 @@ private fun Route.serveWithoutExtension(root: File) {
         if (it.isDirectory) serveWithoutExtension(it)
         // Serve index files under their parent's path
         else if (it.nameWithoutExtension == "index") {
-            val relativePath = "/" + root.relativeTo(staticRootFolder!!).name
+            val relativePath = "/" + root.relativeTo(staticRootFolder!!).name.removeSuffix("/")
             file(relativePath, it)
+            file("$relativePath/", it)
         }
     }
 }
