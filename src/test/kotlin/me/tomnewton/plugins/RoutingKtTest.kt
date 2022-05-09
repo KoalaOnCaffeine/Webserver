@@ -8,6 +8,7 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import kotlinx.coroutines.runBlocking
 import me.tomnewton.database.AccountDAOTestImpl
+import me.tomnewton.database.TeamDAOTestImpl
 import me.tomnewton.shared.responses.PageNotFoundResponse
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -29,7 +30,7 @@ class RoutingKtTest {
     ) {
         testApplication {
             application {
-                configureRouting(AccountDAOTestImpl())
+                configureRouting(AccountDAOTestImpl(), TeamDAOTestImpl())
                 configureStatusPages()
             }
             client.request {
