@@ -9,13 +9,6 @@ https://stackoverflow.com/questions/19154202/data-access-object-dao-in-java
 interface AccountDAO {
 
     /**
-     * Gets the number of accounts in the database
-     * @return the number of accounts
-     */
-
-    fun countAccounts(): Int
-
-    /**
      * Inserts an account into the records, auto-incrementing the ID
      * @param account the account to add
      * @return Whether the operation was successful

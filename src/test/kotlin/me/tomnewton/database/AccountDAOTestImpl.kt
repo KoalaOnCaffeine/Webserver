@@ -8,8 +8,6 @@ class AccountDAOTestImpl(private val accounts: MutableMap<Long, Account> = mutab
     private val accountsByUsername =
         accounts.map { entry -> entry.value.username to entry.value }.toMap().toMutableMap()
 
-    override fun countAccounts() = accounts.size
-
     override fun insertAccount(account: Account): Boolean {
         // Return true if the previous value was null, meaning nothing would be overwritten
         val absent = accounts.putIfAbsent(account.id, account)
