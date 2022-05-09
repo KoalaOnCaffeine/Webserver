@@ -21,13 +21,13 @@ internal class GetKtTest {
     )
 
     @Test
-    fun getPresentAccountTest() {
+    fun testGetPresentAccount() {
         assertEquals(elizabethOlsenAccount, exampleDAO.getAccountById(0))
         assertEquals(chrisHemsworthAccount, exampleDAO.getAccountById(1))
     }
 
     @Test
-    fun getAbsentAccountTest() {
+    fun testGetAbsentAccount() {
         assertEquals(null, exampleDAO.getAccountById(-1))
         assertEquals(null, exampleDAO.getAccountById(2))
     }
