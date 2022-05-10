@@ -30,7 +30,9 @@ class RoutingKtTest {
     ) {
         testApplication {
             application {
+                configureSecurity()
                 configureRouting(AccountDAOImpl(), TeamDAOImpl())
+                configureHTTP()
                 configureStatusPages()
             }
             client.request {
@@ -38,16 +40,6 @@ class RoutingKtTest {
                 url(endpoint)
             } // Create a request using the builder, but make sure the endpoint cannot be changed
                 .run { block() } // Run the test
-        }
-    }
-
-    @Test
-    fun `Verify serving Hello World page`() {
-        testHandle("/") {
-            // Response code should be the OK code, 200
-            assertEquals(HttpStatusCode.OK, status)
-            // Content of the page should be "Hello world!"
-            assertEquals("Hello World!", body()) // body returns the raw content, e.g. unparsed html
         }
     }
 
