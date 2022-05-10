@@ -14,21 +14,22 @@ fun Route.getAccount(accountDAO: AccountDAO) {
     get("/{id}") {
         val accountID = call.parameter("id", String::toLongOrNull)
         if (accountID == null) {
-            Logger.getGlobal().info("Account get fail - invalid or no account ID")
-            call.respondText("Invalid account ID")
+            Logger.getGlobal().info("Invalid account ID")
+            val response = AccountGetFailResponse("Invalid account ID")
+            call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.BadRequest)
             return@get
         }
         val account = accountDAO.getAccountById(accountID)
         if (account == null) {
-            val response = AccountGetFailResponse()
             Logger.getGlobal().info("No account found")
-            call.respondText(response.toJsonObject())
+            val response = AccountGetFailResponse("No account found with the specified ID")
+            call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.NotFound)
             return@get
         }
 
         // Replace with response message
         val response = AccountGetSuccessResponse(account)
         Logger.getGlobal().info("Account found")
-        call.respondText(response.toJsonObject(), ContentType.Application.Json)
+        call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.OK)
     }
 }
