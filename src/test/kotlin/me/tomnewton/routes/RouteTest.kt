@@ -5,7 +5,9 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import me.tomnewton.database.AccountDAO
 import me.tomnewton.database.AccountDAOImpl
+import me.tomnewton.database.TeamDAO
 import me.tomnewton.database.TeamDAOImpl
 import me.tomnewton.plugins.configureHTTP
 import me.tomnewton.plugins.configureRouting
@@ -14,10 +16,13 @@ import me.tomnewton.plugins.configureStatusPages
 
 // Conduct a test on a route, with a given method
 internal fun test(
-    method: HttpMethod, route: String, builder: HttpRequestBuilder.() -> Unit, test: HttpResponse.() -> Unit
+    method: HttpMethod,
+    route: String,
+    builder: HttpRequestBuilder.() -> Unit,
+    accountDAO: AccountDAO = AccountDAOImpl(),
+    teamDAO: TeamDAO = TeamDAOImpl(),
+    test: HttpResponse.() -> Unit
 ) {
-    val accountDAO = AccountDAOImpl()
-    val teamDAO = TeamDAOImpl()
     testApplication {
         application {
             // Install all the plugins
