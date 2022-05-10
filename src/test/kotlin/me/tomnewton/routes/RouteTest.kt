@@ -13,16 +13,20 @@ import me.tomnewton.plugins.configureHTTP
 import me.tomnewton.plugins.configureRouting
 import me.tomnewton.plugins.configureSecurity
 import me.tomnewton.plugins.configureStatusPages
+import kotlin.test.assertEquals
 
 // Conduct a test on a route, with a given method
 internal fun test(
     method: HttpMethod,
     route: String,
-    builder: HttpRequestBuilder.() -> Unit,
     accountDAO: AccountDAO = AccountDAOImpl(),
     teamDAO: TeamDAO = TeamDAOImpl(),
-    test: HttpResponse.() -> Unit
+    expectedContentType: ContentType = ContentType.Application.Json,
+    expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
+    builder: HttpRequestBuilder.() -> Unit = {},
+    test: suspend HttpResponse.() -> Unit
 ) {
+
     testApplication {
         application {
             // Install all the plugins
@@ -31,19 +35,19 @@ internal fun test(
             configureHTTP()
             configureStatusPages()
         }
-        try {
 
-            val response = client.request {
-                // Let the builder edit the request, then set the method and route
-                builder(this)
-                this.method = method
-                url(route)
-            }
-
-            // Run the test method on the response
-            test(response)
-        } catch (e: ClientRequestException) {
-            // This should happen for 400 responses
+        val response = client.request {
+            expectSuccess = false
+            // Let the builder edit the request, then set the method and route
+            builder(this)
+            this.method = method
+            url(route)
         }
+
+        assertEquals(expectedContentType, response.contentType()?.withoutParameters())
+        assertEquals(expectedStatusCode, response.status)
+
+        // Run the test method on the response
+        test(response)
     }
 }
