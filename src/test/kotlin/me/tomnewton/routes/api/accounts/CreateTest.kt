@@ -53,7 +53,7 @@ class CreateTest {
         builder: HttpRequestBuilder.() -> Unit = {},
         response: suspend HttpResponse.() -> Unit
     ) {
-        test(HttpMethod.Post, "/api/accounts/create", {
+        test(HttpMethod.Post, "/api/accounts/create", builder = {
             builder(this)
             setBody("""{"username": "$username", "email": "$email", "password": "$password", "dateOfBirth" : "$dateOfBirth"}""")
         }) { runBlocking { response(this@test) } }
