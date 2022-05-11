@@ -4,7 +4,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.date.*
-import kotlinx.coroutines.runBlocking
 import me.tomnewton.plugins.parseObject
 import me.tomnewton.routes.test
 import me.tomnewton.shared.responses.accounts.ACCOUNT_CREATE_FAIL
@@ -13,9 +12,7 @@ import org.junit.Test
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
-import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 internal const val validUsername = "elizabeth_olsen"
 internal const val usernameTooLong = "elizabeth_olsen_wanda" // >20 chars
@@ -45,194 +42,188 @@ internal val dateOfBirthWayTooOld = SimpleDateFormat("dd-MM-yyyy").format(
 
 class CreateTest {
 
-    private fun postWith(
+    private fun expect(
         username: String,
         email: String,
         password: String,
         dateOfBirth: String,
-        builder: HttpRequestBuilder.() -> Unit = {},
-        response: suspend HttpResponse.() -> Unit
+        expectedCode: Int,
+        expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
+        expectedContentType: ContentType = ContentType.Application.Json
     ) {
-        test(HttpMethod.Post, "/api/accounts/create", builder = {
-            builder(this)
-            setBody("""{"username": "$username", "email": "$email", "password": "$password", "dateOfBirth" : "$dateOfBirth"}""")
-        }) { runBlocking { response(this@test) } }
-    }
-
-    private fun test(
-        username: String,
-        email: String,
-        password: String,
-        dateOfBirth: String,
-        expectedStatus: HttpStatusCode,
-        expectedCode: Int
-    ): Boolean {
-        postWith(username, email, password, dateOfBirth) {
-            assertContains(contentType()?.contentType ?: "", ContentType.Application.Json.contentType)
-            assertEquals(expectedStatus, status)
-            val json = parseObject(bodyAsText())
-            assertEquals(
-                expectedCode, json.getOrDefault("code", -1).toString().toIntOrNull()
-            ) // Defaults to long which isn't right
+        test(HttpMethod.Post,
+            "/api/accounts/create",
+            expectedContentType = expectedContentType,
+            expectedStatusCode = expectedStatusCode,
+            builder = {
+                setBody("""{"username": "$username", "email": "$email", "password": "$password", "dateOfBirth" : "$dateOfBirth"}""")
+            }) {
+            val body = bodyAsText()
+            val json = parseObject(body)
+            assertEquals(expectedCode, json["code"]?.toString()?.toIntOrNull() ?: Int.MIN_VALUE)
         }
-        return true // No error, so it must have worked
     }
 
     @Test
-    fun testAllValid() = assertTrue {
-        test(validUsername, validEmail, validPassword, validDateOfBirth, HttpStatusCode.OK, ACCOUNT_CREATE_SUCCESS)
+    fun testAllValid() {
+        expect(validUsername, validEmail, validPassword, validDateOfBirth, ACCOUNT_CREATE_SUCCESS, HttpStatusCode.OK)
     }
 
     @Test
-    fun testUsernameTooLong() = assertTrue {
-        test(
-            usernameTooLong, validEmail, validPassword, validDateOfBirth, HttpStatusCode.BadRequest, ACCOUNT_CREATE_FAIL
+    fun testUsernameTooLong() {
+        expect(
+            usernameTooLong, validEmail, validPassword, validDateOfBirth, ACCOUNT_CREATE_FAIL, HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testUsernameInvalidCharacters() = assertTrue {
-        test(
+    fun testUsernameInvalidCharacters() {
+        expect(
             usernameInvalidChars,
             validEmail,
             validPassword,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testEmailNoDomain() = assertTrue {
-        test(
+    fun testEmailNoDomain() {
+        expect(
             validUsername,
             emailNoDomain,
             validPassword,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testEmailInvalidDomain() = assertTrue {
-        test(
+    fun testEmailInvalidDomain() {
+        expect(
             validUsername,
             emailInvalidDomain,
             validPassword,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testEmailJustUser() = assertTrue {
-        test(
+    fun testEmailJustUser() {
+        expect(
             validUsername,
             emailJustUser,
             validPassword,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testEmailJustDomain() = assertTrue {
-        test(
-            validUsername, emailJustDomain, validPassword, validDateOfBirth, HttpStatusCode.BadRequest, DEFAULT_PORT
+    fun testEmailJustDomain() {
+        expect(
+            validUsername,
+            emailJustDomain,
+            validPassword,
+            validDateOfBirth,
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testPasswordTooShort() = assertTrue {
-        test(
+    fun testPasswordTooShort() {
+        expect(
             validUsername,
             validEmail,
             passwordTooShort,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testPasswordNoPunctuation() = assertTrue {
-        test(
+    fun testPasswordNoPunctuation() {
+        expect(
             validUsername,
             validEmail,
             passwordNoPunctuation,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testPasswordNoNumbers() = assertTrue {
-        test(
+    fun testPasswordNoNumbers() {
+        expect(
             validUsername,
             validEmail,
             passwordNoNumbers,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testPasswordNoCapitals() = assertTrue {
-        test(
+    fun testPasswordNoCapitals() {
+        expect(
             validUsername,
             validEmail,
             passwordNoCapitals,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testPasswordNoLowercases() = assertTrue {
-        test(
+    fun testPasswordNoLowercases() {
+        expect(
             validUsername,
             validEmail,
             passwordNoLowercases,
             validDateOfBirth,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testDateOfBirthBorderline() = assertTrue {
-        test(
-            validUsername, validEmail, validPassword, dateOfBirthBorderline, HttpStatusCode.OK, ACCOUNT_CREATE_SUCCESS
+    fun testDateOfBirthBorderline() {
+        expect(
+            validUsername, validEmail, validPassword, dateOfBirthBorderline, ACCOUNT_CREATE_SUCCESS, HttpStatusCode.OK
         )
     }
 
     @Test
-    fun testDateOfBirthTooYoung() = assertTrue {
-        test(
+    fun testDateOfBirthTooYoung() {
+        expect(
             validUsername,
             validEmail,
             validPassword,
             dateOfBirthTooYoung,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 
     @Test
-    fun testDateOfBirthWayTooOld() = assertTrue {
-        test(
+    fun testDateOfBirthWayTooOld() {
+        expect(
             validUsername,
             validEmail,
             validPassword,
             dateOfBirthWayTooOld,
-            HttpStatusCode.BadRequest,
-            ACCOUNT_CREATE_FAIL
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
         )
     }
 }
