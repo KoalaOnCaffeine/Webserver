@@ -9,12 +9,20 @@ import me.tomnewton.database.TeamDAOImpl
 import me.tomnewton.database.model.Account
 import me.tomnewton.plugins.parseObject
 import me.tomnewton.routes.test
+import me.tomnewton.shared.responses.accounts.ACCOUNT_GET_FAIL
 import me.tomnewton.shared.responses.accounts.ACCOUNT_GET_SUCCESS
 import org.junit.Test
 import kotlin.test.assertEquals
 
 internal val elizabethOlsenAccount = Account(
-    0, validUsername, validEmail, validPassword, validDateOfBirth, mutableListOf(), mutableListOf(), defaultImage
+    System.currentTimeMillis(),
+    validUsername,
+    validEmail,
+    validPassword,
+    validDateOfBirth,
+    mutableListOf(),
+    mutableListOf(),
+    defaultImage
 )
 
 class GetKtTest {
@@ -29,7 +37,14 @@ class GetKtTest {
         accountDAO: AccountDAO = AccountDAOImpl(),
         teamDAO: TeamDAO = TeamDAOImpl(),
     ) {
-        test(HttpMethod.Get, "/api/accounts/$id", accountDAO, teamDAO, expectedContentType, expectedStatusCode) {
+        test(
+            HttpMethod.Get,
+            "/api/accounts/$id",
+            accountDAO,
+            teamDAO,
+            expectedContentType,
+            expectedStatusCode,
+        ) {
             val body = bodyAsText()
             val json = parseObject(body)
             assertEquals(expectedCode, json["code"]?.toString()?.toIntOrNull() ?: Int.MIN_VALUE)
@@ -39,7 +54,13 @@ class GetKtTest {
     @Test
     fun testGetPresentAccount() {
         expect(
-            elizabethOlsenAccount.id, ACCOUNT_GET_SUCCESS, accountDAO = filledAccountDAO
+            0, ACCOUNT_GET_SUCCESS, HttpStatusCode.OK, accountDAO = filledAccountDAO
         )
     }
+
+    @Test
+    fun testGetAbsentAccount() {
+        expect(elizabethOlsenAccount.id, ACCOUNT_GET_FAIL, HttpStatusCode.NoContent)
+    }
+
 }
