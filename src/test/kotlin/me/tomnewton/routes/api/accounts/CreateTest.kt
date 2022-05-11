@@ -31,12 +31,12 @@ internal const val passwordNoNumbers = "POINTBreak" // No numbers
 internal const val passwordNoCapitals = "p01ntbr3ak" // No capitals
 internal const val passwordNoLowercases = "P0INTBR3AK" // No lowercases
 
-internal const val validDateOfBirth = "16-02-1989"
-internal val dateOfBirthBorderline = SimpleDateFormat("dd-MM-yyyy").format(
+internal const val validDateOfBirth = "1989-02-16"
+internal val dateOfBirthBorderline = SimpleDateFormat("yyyy-MM-dd").format(
     Calendar.getInstance().toDate(System.currentTimeMillis()).minus(Duration.ofDays(365).toMillis()).toJvmDate()
 )
-internal val dateOfBirthTooYoung = SimpleDateFormat("dd-MM-yyyy").format(Date()) // Current date is too young
-internal val dateOfBirthWayTooOld = SimpleDateFormat("dd-MM-yyyy").format(
+internal val dateOfBirthTooYoung = SimpleDateFormat("yyyy-MM-dd").format(Date()) // Current date is too young
+internal val dateOfBirthWayTooOld = SimpleDateFormat("yyyy-MM-dd").format(
     Date((System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 365.25 * 150).toLong())
 )
 
