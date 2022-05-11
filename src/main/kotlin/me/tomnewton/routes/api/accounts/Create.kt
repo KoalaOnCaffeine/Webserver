@@ -53,7 +53,7 @@ fun Route.createAccount(accountDAO: AccountDAO) {
             val token = createTokenFor(account.id)
 
             val insertResponse = insert(account, accountDAO, token)
-            Logger.getGlobal().info("Account created successfully")
+            Logger.getGlobal().info("Account created successfully - ${account.id}")
             call.respondText(insertResponse.toJsonObject(), ContentType.Application.Json)
 
         } else {
