@@ -23,7 +23,7 @@ fun Route.getAccount(accountDAO: AccountDAO) {
         if (account == null) {
             Logger.getGlobal().info("No account found")
             val response = AccountGetFailResponse("No account found with the specified ID")
-            call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.NotFound)
+            call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.NoContent)
             return@get
         }
 
