@@ -33,7 +33,8 @@ internal const val passwordNoLowercases = "P0INTBR3AK" // No lowercases
 
 internal const val validDateOfBirth = "1989-02-16"
 internal val dateOfBirthBorderline = SimpleDateFormat("yyyy-MM-dd").format(
-    Calendar.getInstance().toDate(System.currentTimeMillis()).minus(Duration.ofDays(365).toMillis()).toJvmDate()
+    Calendar.getInstance().toDate(System.currentTimeMillis()).minus(Duration.ofDays((365.25 * 13).toLong()).toMillis())
+        .toJvmDate()
 )
 internal val dateOfBirthTooYoung = SimpleDateFormat("yyyy-MM-dd").format(Date()) // Current date is too young
 internal val dateOfBirthWayTooOld = SimpleDateFormat("yyyy-MM-dd").format(
