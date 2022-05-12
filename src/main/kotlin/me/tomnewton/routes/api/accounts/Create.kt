@@ -183,7 +183,7 @@ fun isValidDateOfBirth(dateOfBirth: String): Boolean {
 
 // Date was at least 13 years ago
 fun dateIsOldEnough(date: Date): Boolean {
-    val offsetDate = Calendar.getInstance().toDate(System.currentTimeMillis() - date.time)
+    val offsetDate = Calendar.getInstance().toDate(Date().time - date.time)
     return offsetDate.year - 1970 >= 13
 }
 
