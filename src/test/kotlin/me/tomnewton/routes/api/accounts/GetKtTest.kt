@@ -54,13 +54,13 @@ class GetKtTest {
     @Test
     fun testGetPresentAccount() {
         expect(
-            0, ACCOUNT_GET_SUCCESS, HttpStatusCode.OK, accountDAO = filledAccountDAO
+            elizabethOlsenAccount.id, ACCOUNT_GET_SUCCESS, HttpStatusCode.OK, accountDAO = filledAccountDAO
         )
     }
 
     @Test
     fun testGetAbsentAccount() {
-        expect(elizabethOlsenAccount.id, ACCOUNT_GET_FAIL, HttpStatusCode.NoContent)
+        expect(0, ACCOUNT_GET_FAIL, HttpStatusCode.NoContent)
     }
 
 }
