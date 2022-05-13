@@ -32,7 +32,12 @@ internal const val passwordNoCapitals = "p01ntbr3ak" // No capitals
 internal const val passwordNoLowercases = "P0INTBR3AK" // No lowercases
 
 internal const val validDateOfBirth = "1989-02-16"
-internal val dateOfBirthBorderline = SimpleDateFormat("yyyy-MM-dd").format(
+
+internal val dateOfBirthBorderlineLow = SimpleDateFormat("yyyy-MM-dd").format(
+    Calendar.getInstance().toDate(System.currentTimeMillis())
+        .minus(Duration.ofDays((365.25 * 13 - 1).toLong()).toMillis()).toJvmDate()
+)
+internal val dateOfBirthBorderlineHigh = SimpleDateFormat("yyyy-MM-dd").format(
     Calendar.getInstance().toDate(System.currentTimeMillis()).minus(Duration.ofDays((365.25 * 13).toLong()).toMillis())
         .toJvmDate()
 )
@@ -198,9 +203,26 @@ class CreateTest {
     }
 
     @Test
-    fun testDateOfBirthBorderline() {
+    fun testDateOfBirthBorderlineLow() {
         expect(
-            validUsername, validEmail, validPassword, dateOfBirthBorderline, ACCOUNT_CREATE_SUCCESS, HttpStatusCode.OK
+            validUsername,
+            validEmail,
+            validPassword,
+            dateOfBirthBorderlineLow,
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.BadRequest
+        )
+    }
+
+    @Test
+    fun testDateOfBirthBorderlineHigh() {
+        expect(
+            validUsername,
+            validEmail,
+            validPassword,
+            dateOfBirthBorderlineHigh,
+            ACCOUNT_CREATE_SUCCESS,
+            HttpStatusCode.OK
         )
     }
 
