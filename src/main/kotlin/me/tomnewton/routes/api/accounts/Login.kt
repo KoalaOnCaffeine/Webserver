@@ -2,8 +2,6 @@ package me.tomnewton.routes.api.accounts
 
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -16,17 +14,6 @@ import java.util.logging.Logger
 
 // Login route is used to provide authentication for the dashboard for someone who has an account, but isn't logged in
 fun Route.login(accountDAO: AccountDAO) {
-    authenticate("auth-jwt") {
-        // test for tokens
-        get("/test") {
-            val principal = call.principal<JWTPrincipal>()!!
-            println(principal.payload.claims)
-            val id = principal.payload.getClaim("user_id").asLong()
-            val username = accountDAO.getAccountById(id)?.username ?: "null"
-            Logger.getGlobal().info("Test route used")
-            call.respondText("Hello, $username")
-        }
-    }
     post("/login") {
         val content = parseObject(call.receiveText())
         val username = content.getOrDefault("username", null) as String?
