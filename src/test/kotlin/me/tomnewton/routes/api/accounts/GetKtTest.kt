@@ -30,7 +30,7 @@ class GetKtTest {
     private val filledAccountDAO = AccountDAOImpl(mutableMapOf(elizabethOlsenAccount.id to elizabethOlsenAccount))
 
     private fun expect(
-        id: Long,
+        id: String,
         expectedCode: Int,
         expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
         expectedContentType: ContentType = ContentType.Application.Json,
@@ -54,13 +54,18 @@ class GetKtTest {
     @Test
     fun testGetPresentAccount() {
         expect(
-            elizabethOlsenAccount.id, ACCOUNT_GET_SUCCESS, HttpStatusCode.OK, accountDAO = filledAccountDAO
+            elizabethOlsenAccount.id.toString(), ACCOUNT_GET_SUCCESS, HttpStatusCode.OK, accountDAO = filledAccountDAO
         )
     }
 
     @Test
     fun testGetAbsentAccount() {
-        expect(0, ACCOUNT_GET_FAIL, HttpStatusCode.NoContent)
+        expect("0", ACCOUNT_GET_FAIL, HttpStatusCode.NoContent)
+    }
+
+    @Test
+    fun testGetInvalidAccountID() {
+        expect("-=very invalid id=-", ACCOUNT_GET_FAIL, HttpStatusCode.BadRequest)
     }
 
 }
