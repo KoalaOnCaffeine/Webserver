@@ -25,9 +25,9 @@ internal val elizabethOlsenAccount = Account(
     defaultImage
 )
 
-class GetKtTest {
+internal val filledAccountDAO = AccountDAOImpl(mutableMapOf(elizabethOlsenAccount.id to elizabethOlsenAccount))
 
-    private val filledAccountDAO = AccountDAOImpl(mutableMapOf(elizabethOlsenAccount.id to elizabethOlsenAccount))
+class GetKtTest {
 
     private fun expect(
         id: String,
