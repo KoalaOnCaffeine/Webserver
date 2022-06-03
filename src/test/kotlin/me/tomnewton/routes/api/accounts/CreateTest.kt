@@ -1,10 +1,8 @@
 package me.tomnewton.routes.api.accounts
 
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.date.*
-import me.tomnewton.plugins.parseObject
 import me.tomnewton.routes.test
 import me.tomnewton.shared.responses.accounts.ACCOUNT_CREATE_FAIL
 import me.tomnewton.shared.responses.accounts.ACCOUNT_CREATE_SUCCESS
@@ -12,7 +10,6 @@ import org.junit.Test
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
-import kotlin.test.assertEquals
 
 internal const val validUsername = "elizabeth_olsen"
 internal const val usernameTooLong = "elizabeth_olsen_wanda" // >20 chars
@@ -55,19 +52,10 @@ class CreateTest {
         dateOfBirth: String,
         expectedCode: Int,
         expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
-        expectedContentType: ContentType = ContentType.Application.Json
     ) {
-        test(HttpMethod.Post,
-            "/api/accounts/create",
-            expectedContentType = expectedContentType,
-            expectedStatusCode = expectedStatusCode,
-            builder = {
-                setBody("""{"username": "$username", "email": "$email", "password": "$password", "dateOfBirth" : "$dateOfBirth"}""")
-            }) {
-            val body = bodyAsText()
-            val json = parseObject(body)
-            assertEquals(expectedCode, json["code"]?.toString()?.toIntOrNull() ?: Int.MIN_VALUE)
-        }
+        test(HttpMethod.Post, "/api/accounts/create", expectedCode, expectedStatusCode, builder = {
+            setBody("""{"username": "$username", "email": "$email", "password": "$password", "dateOfBirth" : "$dateOfBirth"}""")
+        })
     }
 
     @Test

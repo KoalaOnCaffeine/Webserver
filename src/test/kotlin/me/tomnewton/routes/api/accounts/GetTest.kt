@@ -1,18 +1,15 @@
 package me.tomnewton.routes.api.accounts
 
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.database.AccountDAOImpl
 import me.tomnewton.database.TeamDAO
 import me.tomnewton.database.TeamDAOImpl
 import me.tomnewton.database.model.Account
-import me.tomnewton.plugins.parseObject
 import me.tomnewton.routes.test
 import me.tomnewton.shared.responses.accounts.ACCOUNT_GET_FAIL
 import me.tomnewton.shared.responses.accounts.ACCOUNT_GET_SUCCESS
 import org.junit.Test
-import kotlin.test.assertEquals
 
 internal val elizabethOlsenAccount = Account(
     System.currentTimeMillis(),
@@ -40,15 +37,12 @@ class GetKtTest {
         test(
             HttpMethod.Get,
             "/api/accounts/$id",
+            expectedCode,
+            expectedStatusCode,
+            expectedContentType,
             accountDAO,
             teamDAO,
-            expectedContentType,
-            expectedStatusCode,
-        ) {
-            val body = bodyAsText()
-            val json = parseObject(body)
-            assertEquals(expectedCode, json["code"]?.toString()?.toIntOrNull() ?: Int.MIN_VALUE)
-        }
+        )
     }
 
     @Test

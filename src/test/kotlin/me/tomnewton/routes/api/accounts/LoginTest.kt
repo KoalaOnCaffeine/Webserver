@@ -1,16 +1,13 @@
 package me.tomnewton.routes.api.accounts
 
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.database.AccountDAOImpl
-import me.tomnewton.plugins.parseObject
 import me.tomnewton.routes.test
 import me.tomnewton.shared.responses.accounts.ACCOUNT_LOGIN_FAIL
 import me.tomnewton.shared.responses.accounts.ACCOUNT_LOGIN_SUCCESS
 import org.junit.Test
-import kotlin.test.assertEquals
 
 class LoginTest {
 
@@ -20,23 +17,16 @@ class LoginTest {
         password: String,
         expectedCode: Int,
         expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
-        expectedContentType: ContentType = ContentType.Application.Json,
         accountDAO: AccountDAO = AccountDAOImpl(),
     ) {
-        test(
-            HttpMethod.Post,
+        test(HttpMethod.Post,
             "/api/accounts/login",
-            accountDAO,
-            expectedContentType = expectedContentType,
-            expectedStatusCode = expectedStatusCode,
+            expectedCode,
+            expectedStatusCode,
+            accountDAO = accountDAO,
             builder = {
                 setBody("""{"username": "$username", "password": "$password" }""")
-            }
-        ) {
-            val body = bodyAsText()
-            val json = parseObject(body)
-            assertEquals(expectedCode, json["code"]?.toString()?.toIntOrNull() ?: Int.MIN_VALUE)
-        }
+            })
     }
 
     @Test
