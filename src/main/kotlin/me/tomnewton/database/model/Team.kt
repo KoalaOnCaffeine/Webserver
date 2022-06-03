@@ -14,21 +14,20 @@ import me.tomnewton.shared.DataObject
 
 data class Team(
     val id: Long,
+    val name: String,
     val description: String?,
     val projectIDs: List<Long>,
     val managerIDs: List<Long>,
     val memberIDs: List<Long>,
     val imageURL: String
 ) : DataObject {
-    override fun toJsonObject() = """{ "id": $id, "description": "$description", "projectIDs": ${
+    override fun toJsonObject() = """{ "id": "$id", "name": "$name", "description": "$description", "projectIDs": ${
         projectIDs.joinToString(
-            prefix = "[",
-            postfix = "]"
+            prefix = "[", postfix = "]"
         )
     }, "managerIDs": ${
-        managerIDs.joinToString(
-            prefix = "[",
-            postfix = "]"
-        )
-    }, "memberIDs": ${memberIDs.joinToString(prefix = "[", postfix = "]")}, "imageURL": "$imageURL" }"""
+        managerIDs.joinToString(prefix = "[", postfix = "]", transform = { "\"$it\"" })
+    }, "memberIDs": ${
+        memberIDs.joinToString(prefix = "[", postfix = "]", transform = { "\"$it\"" })
+    }, "imageURL": "$imageURL" }"""
 }

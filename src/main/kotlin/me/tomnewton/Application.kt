@@ -18,6 +18,7 @@ fun main() {
         mutableMapOf(
             0L to Team(
                 0L,
+                "Team name",
                 "description",
                 mutableListOf(),
                 mutableListOf(),
