@@ -25,7 +25,11 @@ fun Application.configureSecurity() {
             }
 
             challenge { _, _ ->
-                call.respond(HttpStatusCode.Unauthorized, InvalidTokenResponse().toJsonObject())
+                call.respondText(
+                    InvalidTokenResponse().toJsonObject(),
+                    ContentType.Application.Json,
+                    HttpStatusCode.Unauthorized
+                )
             }
 
         }
