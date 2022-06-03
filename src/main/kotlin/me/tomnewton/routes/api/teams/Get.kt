@@ -9,6 +9,8 @@ import io.ktor.server.routing.*
 import me.tomnewton.database.AccountDAO
 import me.tomnewton.database.TeamDAO
 import me.tomnewton.plugins.parameter
+import me.tomnewton.shared.responses.teams.TeamsGetFailResponse
+import me.tomnewton.shared.responses.teams.TeamsGetSuccessResponse
 import java.util.logging.Logger
 
 fun Route.getTeam(accountDAO: AccountDAO, teamDAO: TeamDAO) {
@@ -17,9 +19,19 @@ fun Route.getTeam(accountDAO: AccountDAO, teamDAO: TeamDAO) {
             // Return authenticated user's teams
             val principal = call.principal<JWTPrincipal>()!!
             val userID = principal.payload.getClaim("user_id").asLong()
-            val teamArray = accountDAO.getAccountById(userID)!!.teamIDs.mapNotNull { teamDAO.getTeamById(it)?.toJsonObject() }
-                .joinToString(",", "[", "]") { it }
-            call.respondText(teamArray, ContentType.Application.Json, HttpStatusCode.Accepted)
+            val account = accountDAO.getAccountById(userID)
+
+            if (account == null) {
+                // Token didn't have a claim to a valid account - tell them the token was invalid
+                Logger.getGlobal().info("Teams requested with invalid token")
+                val response = TeamsGetFailResponse("The provided token was invalid")
+                call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.BadRequest)
+            } else {
+                // Token had a claim to a valid account - return their teams
+                Logger.getGlobal().info("Teams found")
+                val response = TeamsGetSuccessResponse(account.teamIDs.mapNotNull(teamDAO::getTeamById))
+                call.respondText(response.toJsonObject(), ContentType.Application.Json, HttpStatusCode.OK)
+            }
         }
         get("/{id}") {
             val principal = call.principal<JWTPrincipal>()!!
