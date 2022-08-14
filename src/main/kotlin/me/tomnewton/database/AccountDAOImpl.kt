@@ -27,7 +27,7 @@ class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMa
     override fun getAccountByUsername(username: String) = accountsByUsername[username]
 
     override fun updateAccount(id: Long, account: Account): Boolean {
-        if (!accounts.containsKey(id)) return false // If
+        if (!accounts.containsKey(id)) return false // If the account isn't there, it cannot be updated
         accounts[id] = account
         accountsByUsername[account.username] = account
         return true // This operation just doesn't fail like a database could
