@@ -3,6 +3,8 @@ package me.tomnewton.routes.api.accounts
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
+import me.tomnewton.database.AccountDAO
+import me.tomnewton.database.AccountDAOImpl
 import me.tomnewton.routes.test
 import me.tomnewton.shared.responses.accounts.ACCOUNT_CREATE_FAIL
 import me.tomnewton.shared.responses.accounts.ACCOUNT_CREATE_SUCCESS
@@ -52,10 +54,17 @@ class CreateTest {
         dateOfBirth: String,
         expectedCode: Int,
         expectedStatusCode: HttpStatusCode = HttpStatusCode.OK,
+        accountDAO: AccountDAO = AccountDAOImpl()
     ) {
-        test(HttpMethod.Post, "/api/accounts/create", expectedCode, expectedStatusCode, builder = {
-            setBody("""{"username": "$username", "email": "$email", "password": "$password", "dateOfBirth" : "$dateOfBirth"}""")
-        })
+        test(
+            HttpMethod.Post,
+            "/api/accounts/create",
+            expectedCode,
+            expectedStatusCode,
+            accountDAO = accountDAO,
+            builder = {
+                setBody("""{"username": "$username", "email": "$email", "password": "$password", "dateOfBirth" : "$dateOfBirth"}""")
+            })
     }
 
     @Test
@@ -237,4 +246,39 @@ class CreateTest {
             HttpStatusCode.BadRequest
         )
     }
+
+    @Test
+    fun testAccountUsernameAlreadyExists() {
+        expect(
+            validUsername,
+            "valid@email.com", // Avoid testing the email too
+            validPassword,
+            validDateOfBirth,
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.Conflict,
+            AccountDAOImpl(
+                mutableMapOf(
+                    elizabethOlsenAccount.id to elizabethOlsenAccount
+                )
+            )
+        )
+    }
+
+    @Test
+    fun testAccountEmailAlreadyExists() {
+        expect(
+            "validusername", // Avoid testing the username too
+            validEmail,
+            validPassword,
+            validDateOfBirth,
+            ACCOUNT_CREATE_FAIL,
+            HttpStatusCode.Conflict,
+            AccountDAOImpl(
+                mutableMapOf(
+                    0L to elizabethOlsenAccount
+                )
+            )
+        )
+    }
+
 }

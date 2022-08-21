@@ -15,7 +15,7 @@ private val updatedElizabethOlsenAccount = Account(
     1, validUsername, validEmail, validPassword, validDateOfBirth, mutableListOf(), mutableListOf(), defaultImage
 )
 
-class AccountDAOTestImplTest {
+class AccountDAOImplTest {
     @Test
     fun testInsertAccount() {
         val testAccountDAO = AccountDAOImpl()

@@ -33,6 +33,14 @@ interface AccountDAO {
     fun getAccountByUsername(username: String): Account?
 
     /**
+     * Gets an account with a specified [email]
+     * @param email the email of the account
+     * @return The associated account else null
+     */
+
+    fun getAccountByEmail(email: String): Account?
+
+    /**
      * Update the given [account] in the database
      * @param id the id of the account to update
      * @param account The account to update

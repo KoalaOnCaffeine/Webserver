@@ -41,9 +41,24 @@ fun Route.createAccount(accountDAO: AccountDAO) {
             return@post
         }
 
+        val existingAccountUsername = accountDAO.getAccountByUsername(username!!)
+        val existingAccountEmail = accountDAO.getAccountByEmail(email!!)
+
+        // If either account wasn't null, that means there was a username/email already associated
+        if (existingAccountUsername != null || existingAccountEmail != null) {
+            // Account already existed, so don't create a new one
+            Logger.getGlobal().info("Account create fail - not all information provided")
+            call.respondText(
+                AccountCreateFailResponse("An account with this username or email already exists").toJsonObject(),
+                ContentType.Application.Json,
+                HttpStatusCode.Conflict
+            )
+            return@post
+        }
+
         // Projects and teams should be empty after creating an account
         val account =
-            Account(System.nanoTime(), username!!, email!!, password!!, dateOfBirth!!, listOf(), listOf(), defaultImage)
+            Account(System.nanoTime(), username, email, password!!, dateOfBirth!!, listOf(), listOf(), defaultImage)
 
         val (valid, validateResponse) = validate(account)
 
