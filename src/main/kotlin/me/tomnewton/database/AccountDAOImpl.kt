@@ -16,6 +16,7 @@ class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMa
         if (accounts[account.id] != null || accountsByUsername[account.username] != null || accountsByEmail[account.email] != null) {
             return false
         }
+        accounts[account.id] = account
         accountsByUsername[account.username] = account
         accountsByEmail[account.email] = account
 
