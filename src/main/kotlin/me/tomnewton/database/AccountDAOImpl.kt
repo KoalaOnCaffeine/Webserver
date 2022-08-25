@@ -12,17 +12,19 @@ class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMa
         accounts.map { entry -> entry.value.email to entry.value }.toMap().toMutableMap()
 
     override fun insertAccount(account: Account): Boolean {
-        // Return true if the previous value was null, meaning nothing would be overwritten
-        val absent = accounts.putIfAbsent(account.id, account)
-        if (absent == null) {
-            accountsByUsername[account.username] = account
-            accountsByEmail[account.email] = account
-            with(account) {
-                updateAccount(id, Account(id, username, email, password, dateOfBirth, listOf(0), projectIDs, imageURL))
-            }
-            return true
+        // If there was an account already, don't insert it
+        if (accounts[account.id] != null || accountsByUsername[account.username] != null || accountsByEmail[account.email] != null) {
+            return false
         }
-        return false
+        accountsByUsername[account.username] = account
+        accountsByEmail[account.email] = account
+
+        // TODO Remove - just to make every user have a default team of 0
+        with(account) {
+            updateAccount(id, Account(id, username, email, password, dateOfBirth, listOf(0), projectIDs, imageURL))
+        }
+
+        return true
     }
 
     override fun getAccountById(id: Long) = accounts[id]
@@ -35,6 +37,7 @@ class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMa
         if (!accounts.containsKey(id)) return false // If the account isn't there, it cannot be updated
         accounts[id] = account
         accountsByUsername[account.username] = account
+        accountsByEmail[account.email] = account
         return true // This operation just doesn't fail like a database could
     }
 }
