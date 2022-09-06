@@ -32,3 +32,14 @@ data class Account(
     }, "project_IDs": ${projectIDs.joinToString(prefix = "[", postfix = "]")}, "image_url": "$imageURL" }"""
 
 }
+
+fun Account.update(
+    id: Long = this.id,
+    username: String = this.username,
+    email: String = this.email,
+    password: String = this.password,
+    dateOfBirth: String = this.dateOfBirth,
+    teamIDs: List<Long> = this.teamIDs,
+    projectIDs: List<Long> = this.projectIDs,
+    imageURL: String = this.imageURL,
+) = Account(id, username, email, password, dateOfBirth, teamIDs, projectIDs, imageURL)

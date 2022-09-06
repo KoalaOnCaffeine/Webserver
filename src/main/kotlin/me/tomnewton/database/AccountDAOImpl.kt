@@ -22,7 +22,10 @@ class AccountDAOImpl(private val accounts: MutableMap<Long, Account> = mutableMa
 
         // TODO Remove - just to make every user have a default team of 0
         with(account) {
-            updateAccount(id, Account(id, username, email, password, dateOfBirth, listOf(0), projectIDs, imageURL))
+            updateAccount(
+                id,
+                Account(id, username, email, password, dateOfBirth, listOf(0, 1, 2, 3, 4, 5), projectIDs, imageURL)
+            )
         }
 
         return true

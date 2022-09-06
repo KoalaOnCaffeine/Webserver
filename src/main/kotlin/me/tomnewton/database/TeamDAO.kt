@@ -10,4 +10,6 @@ interface TeamDAO {
 
     fun updateTeam(id: Long, team: Team): Boolean
 
+    fun removeTeam(id: Long): Boolean
+
 }

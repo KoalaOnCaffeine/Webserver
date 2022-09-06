@@ -5,6 +5,6 @@ import me.tomnewton.shared.responses.Response
 
 class TeamsGetSuccessResponse(teams: List<Team>) : Response(TEAMS_GET_SUCCESS, data = """{"teams": ${
     teams.joinToString(prefix = "[", postfix = "]") {
-        it.toJsonObject()
+        it.toJsonObject().also { println(it) }
     }
 } }""")

@@ -1,5 +1,6 @@
 package me.tomnewton.database.model
 
+import me.tomnewton.routes.api.accounts.defaultImage
 import me.tomnewton.shared.DataObject
 
 /**
@@ -19,15 +20,30 @@ data class Team(
     val projectIDs: List<Long>,
     val managerIDs: List<Long>,
     val memberIDs: List<Long>,
-    val imageURL: String
+    val imageURL: String?
 ) : DataObject {
-    override fun toJsonObject() = """{ "id": "$id", "name": "$name", "description": "$description", "projectIDs": ${
-        projectIDs.joinToString(
-            prefix = "[", postfix = "]"
-        )
-    }, "managerIDs": ${
-        managerIDs.joinToString(prefix = "[", postfix = "]", transform = { "\"$it\"" })
-    }, "memberIDs": ${
-        memberIDs.joinToString(prefix = "[", postfix = "]", transform = { "\"$it\"" })
-    }, "imageURL": "$imageURL" }"""
+    override fun toJsonObject() =
+        """{ "id": "$id", "name": "$name", "description": ${if (description == null) null else "\"$description\""}, "projectIDs": ${
+            projectIDs.joinToString(
+                prefix = "[", postfix = "]"
+            )
+        }, "managerIDs": ${
+            managerIDs.joinToString(prefix = "[", postfix = "]", transform = { "\"$it\"" })
+        }, "memberIDs": ${
+            memberIDs.joinToString(prefix = "[", postfix = "]", transform = { "\"$it\"" })
+        }, "imageURL": "${if (imageURL == null) defaultImage else "$imageURL"}" }"""
 }
+
+fun Team.update(
+    name: String? = null,
+    description: String? = null,
+    imageURL: String? = null
+) = Team(
+    this.id,
+    name ?: this.name,
+    description ?: this.description,
+    this.projectIDs,
+    this.managerIDs,
+    this.memberIDs,
+    imageURL ?: this.imageURL
+)

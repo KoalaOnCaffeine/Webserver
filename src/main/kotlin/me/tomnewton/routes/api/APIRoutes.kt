@@ -9,7 +9,10 @@ import me.tomnewton.database.TeamDAO
 import me.tomnewton.routes.api.accounts.createAccount
 import me.tomnewton.routes.api.accounts.getAccount
 import me.tomnewton.routes.api.accounts.login
+import me.tomnewton.routes.api.teams.createTeam
+import me.tomnewton.routes.api.teams.deleteTeam
 import me.tomnewton.routes.api.teams.getTeam
+import me.tomnewton.routes.api.teams.updateTeam
 import java.util.*
 
 /**
@@ -35,6 +38,9 @@ private fun Route.accountRoutes(accountDAO: AccountDAO) {
 
 private fun Route.teamRoutes(accountDAO: AccountDAO, teamDAO: TeamDAO) {
     getTeam(accountDAO, teamDAO)
+    createTeam(accountDAO, teamDAO)
+    deleteTeam(accountDAO, teamDAO)
+    updateTeam(accountDAO, teamDAO)
 }
 
 /**
